@@ -2,15 +2,14 @@
 
 namespace RO.DevTest.Application.Contracts.Persistance.Repositories;
 
-public interface IBaseRepository<T> where T : class {
-
+public interface IBaseRepository<T> where T : class 
+{
     /// <summary>
-    /// Creates a new entity in the database
+    /// Retrieves all entities from the database
     /// </summary>
-    /// <param name="entity"> The entity to be create </param>
-    /// <param name="cancellationToken"> Cancellation token </param>
-    /// <returns> The created entity </returns>
-    Task<T> CreateAsync(T entity, CancellationToken cancellationToken = default);
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>A list of all entities</returns>
+    Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Finds the first entity that matches with the <paramref name="predicate"/>
@@ -22,6 +21,14 @@ public interface IBaseRepository<T> where T : class {
     /// <returns>
     /// The <typeparamref name="T"/> entity, if found. Null otherwise. </returns>
     T? Get(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
+
+    /// <summary>
+    /// Creates a new entity in the database
+    /// </summary>
+    /// <param name="entity"> The entity to be create </param>
+    /// <param name="cancellationToken"> Cancellation token </param>
+    /// <returns> The created entity </returns>
+    Task<T> CreateAsync(T entity, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Updates an entity entry on the database
