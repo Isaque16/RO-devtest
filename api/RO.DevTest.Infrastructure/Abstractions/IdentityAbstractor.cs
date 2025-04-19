@@ -5,27 +5,20 @@ using RO.DevTest.Domain.Enums;
 
 namespace RO.DevTest.Infrastructure.Abstractions;
 
-
 /// <summary>
 /// This is a abstraction of the Identity library, creating methods that will interact with 
 /// it to create and update users
 /// </summary>
-public class IdentityAbstractor : IIdentityAbstractor {
-    private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signInManager;
-    private readonly RoleManager<IdentityRole> _roleManager;
+public class IdentityAbstractor(
+    UserManager<User> userManager,
+    SignInManager<User> signInManager,
+    RoleManager<IdentityRole> roleManager
+    ) : IIdentityAbstractor {
+    private readonly UserManager<User> _userManager = userManager;
+    private readonly SignInManager<User> _signInManager = signInManager;
+    private readonly RoleManager<IdentityRole> _roleManager = roleManager;
 
-    public IdentityAbstractor(
-        UserManager<User> userManager,
-        SignInManager<User> signInManager,
-        RoleManager<IdentityRole> roleManager
-    ) {
-        _userManager = userManager;
-        _signInManager = signInManager;
-        _roleManager = roleManager;
-    }
-
-    public async Task<User?> FindUserByEmailAsync(string email) => await _userManager.FindByEmailAsync(email);
+  public async Task<User?> FindUserByEmailAsync(string email) => await _userManager.FindByEmailAsync(email);
 
     public async Task<User?> FindUserByIdAsync(string userId) => await _userManager.FindByIdAsync(userId);
 
@@ -42,6 +35,7 @@ public class IdentityAbstractor : IIdentityAbstractor {
 
         return await _userManager.CreateAsync(partnerUser, password);
     }
+
     public async Task<SignInResult> PasswordSignInAsync(User user, string password)
         => await _signInManager.PasswordSignInAsync(user, password, false, false);
 
@@ -49,9 +43,18 @@ public class IdentityAbstractor : IIdentityAbstractor {
 
     public async Task<IdentityResult> AddToRoleAsync(User user, UserRoles role) {
         if(await _roleManager.RoleExistsAsync(role.ToString()) is false) {
-            await _roleManager.CreateAsync(new IdentityRole { Name = role.ToString() });
+            var identityRole = new IdentityRole { Name = role.ToString() };
+            await _roleManager.CreateAsync(identityRole);
         }
 
         return await _userManager.AddToRoleAsync(user, role.ToString());
+    }
+
+    public Task<User?> FindUserByUserNameAsync(string userName)
+    {
+        if (string.IsNullOrEmpty(userName))
+            throw new ArgumentException($"{nameof(userName)} cannot be null or empty", nameof(userName));
+        
+        return _userManager.FindByNameAsync(userName);
     }
 }
