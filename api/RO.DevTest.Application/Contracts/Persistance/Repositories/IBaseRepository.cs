@@ -2,8 +2,22 @@
 
 namespace RO.DevTest.Application.Contracts.Persistance.Repositories;
 
+/// <summary>
+/// Generic repository interface for CRUD operations on entities of type <typeparamref name="T"/>.
+/// This interface provides methods for creating, reading, updating, and deleting entities,
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public interface IBaseRepository<T> where T : class 
 {
+    /// <summary>
+    /// Retrieves all entities from the database in a paginated format
+    /// </summary>
+    /// <param name="pageNumber">The page number to retrieve</param>
+    /// <param name="pageSize">The number of items per page</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>A paginated list of entities</returns>
+    Task<(IEnumerable<T> Items, int TotalCount)> GetAllPagedAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default);
+
     /// <summary>
     /// Retrieves all entities from the database
     /// </summary>
@@ -12,15 +26,14 @@ public interface IBaseRepository<T> where T : class
     Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Finds the first entity that matches with the <paramref name="predicate"/>
+    /// Finds an entity by its identifier
     /// </summary>
-    /// <param name="predicate">
-    /// The <see cref="Expression"/> to be used while
-    /// looking for the entity
-    /// </param>
+    /// <param name="id">The identifier of the entity</param>
+    /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>
-    /// The <typeparamref name="T"/> entity, if found. Null otherwise. </returns>
-    T? Get(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
+    /// The <typeparamref name="T"/> entity, if found. Null otherwise.
+    /// </returns>
+    Task<T?> GetByIdAsync(object id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Creates a new entity in the database
@@ -34,11 +47,11 @@ public interface IBaseRepository<T> where T : class
     /// Updates an entity entry on the database
     /// </summary>
     /// <param name="entity"> The entity to be added </param>
-    void Update(T entity);
+    Task<T?> UpdateAsync(T entity);
 
     /// <summary>
     /// Deletes one entry from the database
     /// </summary>
     /// <param name="entity"> The entity to be deleted </param>
-    void Delete(T entity);
+    Task<bool> DeleteAsync(T entity);
 }

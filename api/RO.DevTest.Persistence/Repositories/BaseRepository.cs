@@ -10,13 +10,29 @@ public class BaseRepository<T>(DefaultContext defaultContext) : IBaseRepository<
 
     protected DefaultContext Context { get => _defaultContext; }
 
+    public async Task<(IEnumerable<T> Items, int TotalCount)> GetAllPagedAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
+    {
+        // Calcula o número total de itens
+        int totalCount = await Context.Set<T>().CountAsync(cancellationToken);
+
+        // Obtém os itens da página solicitada
+        var items = await Context.Set<T>()
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+        return (items, totalCount);
+    }
+
     public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         return (await Context.Set<T>().ToListAsync(cancellationToken)).AsEnumerable();
     }
 
-    public T? Get(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
-    => GetQueryWithIncludes(predicate, includes).FirstOrDefault();
+    public async Task<T?> GetByIdAsync(object id, CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<T>().FindAsync([id], cancellationToken);
+    }
 
     public async Task<T> CreateAsync(T entity, CancellationToken cancellationToken = default) 
     {
@@ -25,16 +41,16 @@ public class BaseRepository<T>(DefaultContext defaultContext) : IBaseRepository<
         return entity;
     }
 
-    public async void Update(T entity) 
+    public async Task<T?> UpdateAsync(T entity) 
     {
         Context.Set<T>().Update(entity);
-        await Context.SaveChangesAsync();
+        return await Context.SaveChangesAsync().ContinueWith(t => t.Result > 0 ? entity : null);
     }
 
-    public async void Delete(T entity) 
+    public async Task<bool> DeleteAsync(T entity) 
     {
         Context.Set<T>().Remove(entity);
-        await Context.SaveChangesAsync();
+        return await Context.SaveChangesAsync() > 0;
     }
 
     /// <summary>
@@ -85,5 +101,5 @@ public class BaseRepository<T>(DefaultContext defaultContext) : IBaseRepository<
         }
 
         return baseQuery;
-    }  
+    }
 }
