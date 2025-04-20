@@ -1,7 +1,7 @@
 namespace RO.DevTest.Application.Features.Product.Queries.GetProductByIdQuery;
 
 using MediatR;
-using RO.DevTest.Application.Contracts.Persistance.Repositories;
+using Contracts.Persistance.Repositories;
 using Domain.Entities;
 
 /// <summary>

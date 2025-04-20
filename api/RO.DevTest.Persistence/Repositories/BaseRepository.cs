@@ -1,29 +1,37 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿namespace RO.DevTest.Persistence.Repositories;
+
+using Microsoft.EntityFrameworkCore;
 using RO.DevTest.Application.Contracts.Persistance.Repositories;
 using System.Linq.Expressions;
-
-namespace RO.DevTest.Persistence.Repositories;
+using Application.Features;
 
 public class BaseRepository<T>(DefaultContext defaultContext) : IBaseRepository<T> where T : class 
 {
-    private readonly DefaultContext _defaultContext = defaultContext;
+    protected DefaultContext Context { get => defaultContext; }
 
-    protected DefaultContext Context { get => _defaultContext; }
-
-    public async Task<(IEnumerable<T> Items, int TotalCount)> GetAllPagedAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<PaginatedResult<T>> GetAllPagedAsync(PaginationQuery paginationQuery, CancellationToken cancellationToken = default)
     {
-        // Calcula o número total de itens
-        int totalCount = await Context.Set<T>().CountAsync(cancellationToken);
+        var query = Context.Set<T>().AsQueryable();
 
-        // Obtém os itens da página solicitada
-        var items = await Context.Set<T>()
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync(cancellationToken);
+        if (!string.IsNullOrEmpty(paginationQuery.SortBy))
+        {
+            var parameter = Expression.Parameter(typeof(T), "x");
+            var property = Expression.Property(parameter, paginationQuery.SortBy);
+            var lambda = Expression.Lambda(property, parameter);
 
-        return (items, totalCount);
+            query = paginationQuery.isAscend
+                ? Queryable.OrderBy(query, (dynamic)lambda)
+                : Queryable.OrderByDescending(query, (dynamic)lambda);
+        }
+
+        var totalCount = await query.CountAsync(cancellationToken);
+        var items = await query.Skip((paginationQuery.PageNumber - 1) * paginationQuery.PageSize)
+                                .Take(paginationQuery.PageSize)
+                                .ToListAsync(cancellationToken);
+
+        return new PaginatedResult<T>(items, totalCount, paginationQuery.PageNumber, paginationQuery.PageSize);
     }
-
+    
     public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         return (await Context.Set<T>().ToListAsync(cancellationToken)).AsEnumerable();

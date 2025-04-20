@@ -4,12 +4,13 @@ using MediatR;
 using RO.DevTest.Application.Features.User.Queries;
 
 /// <summary>
-/// Query to get all products with pagination
+/// Query to retrieve all products with pagination.
 /// </summary>
-/// <param name="pageNumber"></param>
-/// <param name="pageSize"></param>
-public class GetAllProductsQuery(int pageNumber = 1, int pageSize = 10) : IRequest<PaginatedResult<Domain.Entities.Product>> { 
-  public int PageNumber { get; set; } = pageNumber;
-  
-  public int PageSize { get; set; } = pageSize;
+/// <remarks>
+/// This query accepts a <see cref="PaginationQuery"/> object to define pagination parameters such as page number,
+/// page size, sorting options, and the sort order. It returns a <see cref="PaginatedResult{T}"/> containing a list
+/// of products and their associated metadata (e.g., total count and total pages).
+/// </remarks>
+public class GetAllProductsQuery(PaginationQuery paginationQuery) : IRequest<PaginatedResult<Domain.Entities.Product>> { 
+    public PaginationQuery PaginationQuery { get; set; } = paginationQuery;
 }

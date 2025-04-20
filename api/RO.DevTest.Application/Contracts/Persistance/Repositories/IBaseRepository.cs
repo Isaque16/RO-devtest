@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using RO.DevTest.Application.Features;
 
 namespace RO.DevTest.Application.Contracts.Persistance.Repositories;
 
@@ -10,13 +11,12 @@ namespace RO.DevTest.Application.Contracts.Persistance.Repositories;
 public interface IBaseRepository<T> where T : class 
 {
     /// <summary>
-    /// Retrieves all entities from the database in a paginated format
+    /// Retrieves a paginated list of entities from the database.
     /// </summary>
-    /// <param name="pageNumber">The page number to retrieve</param>
-    /// <param name="pageSize">The number of items per page</param>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>A paginated list of entities</returns>
-    Task<(IEnumerable<T> Items, int TotalCount)> GetAllPagedAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default);
+    /// <param name="pagination">The pagination details including page number and size.</param>
+    /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+    /// <returns>A paginated result containing the entities and pagination metadata.</returns>
+    Task<PaginatedResult<T>> GetAllPagedAsync(PaginationQuery pagination, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Retrieves all entities from the database
