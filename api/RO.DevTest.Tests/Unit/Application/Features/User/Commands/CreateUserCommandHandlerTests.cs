@@ -22,7 +22,6 @@ public class CreateUserCommandHandlerTests {
             Email = email,
             UserName = "user_test",
             Password = password,
-            PasswordConfirmation = password,
             Name = "Test User"
         };
 
@@ -36,14 +35,12 @@ public class CreateUserCommandHandlerTests {
     [Fact(DisplayName = "Given passwords not matching should throw a BadRequestException")]
     public void Handle_WhenPasswordDoesntMatchPasswordConfirmation_ShouldRaiseABadRequestException() {
         // Arrange
-        string email = "mytestemail@someprovider.com"
-            , password = Guid.NewGuid().ToString()
-            , passwordConfirmation = Guid.NewGuid().ToString();
+        string email = "mytestemail@someprovider.com",
+            password = Guid.NewGuid().ToString();
         CreateUserCommand command = new() {
             Email = email,
             UserName = "user_test",
             Password = password,
-            PasswordConfirmation = passwordConfirmation,
             Name = "Test User"
         };
 

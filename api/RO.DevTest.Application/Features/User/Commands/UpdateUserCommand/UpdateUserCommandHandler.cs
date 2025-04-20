@@ -40,6 +40,7 @@ public class UpdateUserCommandHandler(IUserRepository userRepo) : IRequestHandle
     (
       Id: updatedUser.Id,
       Name: updatedUser.Name,
+      UserName: updatedUser.UserName!,
       Email: updatedUser.Email!
     );
   }

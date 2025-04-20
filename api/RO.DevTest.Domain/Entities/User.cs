@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿namespace RO.DevTest.Domain.Entities;
 
-namespace RO.DevTest.Domain.Entities;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
 
 /// <summary>
 /// Represents a <see cref="IdentityUser"/> int the API
@@ -16,13 +17,8 @@ public class User : IdentityUser
     /// Password of the user
     /// </summary>
     /// <remarks>Used for authentication</remarks>
+    [JsonIgnore]
     public string Password { get; set; } = string.Empty;
-
-    /// <summary>
-    /// List of sales made by the user
-    /// </summary>
-    /// <remarks>Used for displaying the sales made by the user</remarks>
-    ICollection<string> SalesId { get; } = [];
 
     public User() : base() { }
 }

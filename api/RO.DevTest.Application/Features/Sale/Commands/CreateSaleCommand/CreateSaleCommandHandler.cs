@@ -15,7 +15,8 @@ using RO.DevTest.Domain.Exception;
 /// This handler is used to validate the incoming command, transform it into a Sale entity,
 /// and persist it to the underlying data source using the <see cref="ISaleRepository"/>.
 /// </remarks>
-public class CreateSaleCommandHandler(ISaleRepository saleRepo) : IRequestHandler<CreateSaleCommand, Sale>
+public class CreateSaleCommandHandler(ISaleRepository saleRepo) 
+  : IRequestHandler<CreateSaleCommand, Sale>
 {
   /// <summary>
   /// Handles the CreateSaleCommand by creating a new Sale entity based on the provided data
@@ -27,10 +28,12 @@ public class CreateSaleCommandHandler(ISaleRepository saleRepo) : IRequestHandle
   /// <exception cref="BadRequestException">
   /// Thrown when the provided CreateSaleCommand fails validation.
   /// </exception>
-  public async Task<Sale> Handle(CreateSaleCommand request, CancellationToken cancellationToken)
+  public async Task<Sale> Handle(
+    CreateSaleCommand request, CancellationToken cancellationToken)
   {
     CreateSaleCommandValidator validator = new();
-    var validationResult = await validator.ValidateAsync(request, cancellationToken);
+    var validationResult = 
+      await validator.ValidateAsync(request, cancellationToken);
 
     if (!validationResult.IsValid)
       throw new ValidationException($"{validationResult.Errors.Count} validation errors occurred.", validationResult.Errors);

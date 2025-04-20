@@ -1,3 +1,5 @@
+using RO.DevTest.Domain.Entities.ReducedEntities;
+
 namespace RO.DevTest.Application.Features.Sale.Commands.CreateSaleCommand;
 
 using MediatR;
@@ -5,7 +7,7 @@ using Domain.Entities;
 
 public class CreateSaleCommand : IRequest<Sale>
 {
-  public List<Product> Products { get; set; } = [];
+  public List<RProduct> Products { get; set; } = [];
 
   public int Quantity { get; set; } = 0;
 
@@ -13,17 +15,14 @@ public class CreateSaleCommand : IRequest<Sale>
 
   public string CustomerId { get; set; } = string.Empty;
 
-  public User Customer { get; set; } = new();
-
   public Sale AssignTo()
   {
     return new Sale
     {
-      Products = Products,
+      Products = Products.ConvertAll(product => product.ToProduct()),
       Quantity = Quantity,
       TotalPrice = TotalPrice,
       CustomerId = CustomerId,
-      Customer = Customer
     };
   }
 }

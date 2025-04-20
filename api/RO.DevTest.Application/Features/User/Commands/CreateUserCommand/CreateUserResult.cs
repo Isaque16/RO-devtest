@@ -2,16 +2,16 @@
 
 public record CreateUserResult(
     string Id,
-    string UserName,
     string Name,
+    string UserName,
     string Email
 )
 {
     public CreateUserResult(Domain.Entities.User user) 
         : this(
             Id: user.Id,
-            UserName: user.UserName!,
             Name: user.Name!,
+            UserName: user.UserName!,
             Email: user.Email!
         ) { }
 }

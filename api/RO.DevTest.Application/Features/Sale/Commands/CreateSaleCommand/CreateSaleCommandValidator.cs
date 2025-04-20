@@ -21,9 +21,5 @@ public class CreateSaleCommandValidator : AbstractValidator<CreateSaleCommand>
     RuleFor(x => x.CustomerId)
       .NotEmpty()
       .WithMessage("Customer ID cannot be empty.");
-
-    RuleFor(x => x.Customer)
-      .NotNull()
-      .WithMessage("Customer cannot be null.");
   }
 }

@@ -20,12 +20,12 @@ public class Product : BaseEntity
   /// <summary>
   /// Price of the product
   /// </summary>
-  public decimal Price { get; set; } = 0.0m;
+  public decimal Price { get; set; }
 
   /// <summary>
   /// Quantity of the product in stock
   /// </summary>
-  public int Quantity { get; set; } = 0;
+  public int Quantity { get; set; }
 
   /// <summary>
   /// Image URL of the product

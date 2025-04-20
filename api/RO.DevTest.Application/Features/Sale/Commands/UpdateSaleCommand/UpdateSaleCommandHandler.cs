@@ -1,9 +1,10 @@
 namespace RO.DevTest.Application.Features.Sale.Commands.UpdateSaleCommand;
 
 using MediatR;
-using Contracts.Persistance.Repositories;
+using FluentValidation;
 using Domain.Entities;
 using RO.DevTest.Domain.Exception;
+using Contracts.Persistance.Repositories;
 
 /// <summary>
 /// Handles the execution of the update sale command, which is used to
@@ -17,7 +18,8 @@ using RO.DevTest.Domain.Exception;
 /// <param name="saleRepo">
 /// An instance of <see cref="ISaleRepository"/>, used to interact with the data store for <see cref="Sale"/> entities.
 /// </param>
-public class UpdateSaleCommandHandler(ISaleRepository saleRepo) : IRequestHandler<UpdateSaleCommand, Sale>
+public class UpdateSaleCommandHandler(ISaleRepository saleRepo) 
+  : IRequestHandler<UpdateSaleCommand, Sale>
 {
   /// <summary>
   /// Handles the execution of the <see cref="UpdateSaleCommand"/> to update a sale.
@@ -28,19 +30,21 @@ public class UpdateSaleCommandHandler(ISaleRepository saleRepo) : IRequestHandle
   /// <exception cref="BadRequestException">Thrown when the command fails validation.</exception>
   /// <exception cref="KeyNotFoundException">Thrown when no sale is found for the specified ID.</exception>
   /// <exception cref="Exception">Thrown when the update operation fails.</exception>
-  public async Task<Sale> Handle(UpdateSaleCommand request,
-    CancellationToken cancellationToken)
+  public async Task<Sale> Handle(
+    UpdateSaleCommand request, CancellationToken cancellationToken)
   {
     UpdateSaleCommandValidator validator = new();
     var validationResult =
       await validator.ValidateAsync(request, cancellationToken);
 
     if (!validationResult.IsValid)
-      throw new BadRequestException(validationResult);
+      throw new ValidationException($"{validationResult.Errors.Count} validation errors occurred.", validationResult.Errors);
 
-    var sale = await saleRepo.GetByIdAsync(request.Id, cancellationToken) ?? throw new KeyNotFoundException($"Sale with ID {request.Id} not found.");
-    sale = request.AssignToSale(sale);
+    var sale = await saleRepo.GetByIdAsync(request.Id, cancellationToken) 
+               ?? throw new KeyNotFoundException($"Sale with ID {request.Id} not found.");
+    sale = request.AssignTo(sale);
     
-    return await saleRepo.UpdateAsync(sale) ?? throw new Exception($"Failed to update sale with ID {request.Id}.");
+    return await saleRepo.UpdateAsync(sale) 
+           ?? throw new Exception($"Failed to update sale with ID {request.Id}.");
   }
 }

@@ -1,26 +1,27 @@
 namespace RO.DevTest.Application.Features.Sale.Commands.UpdateSaleCommand;
 
+using Domain.Entities.ReducedEntities;
+using Domain.Entities;
 using MediatR;
-using RO.DevTest.Domain.Entities;
 
 public class UpdateSaleCommand : IRequest<Sale>
 {
-  public string Id { get; set; } = string.Empty;
-  public List<Product> Products { get; set; } = [];
+  public Guid Id { get; set; } = Guid.Empty;
+  
+  public List<RProduct> Products { get; set; } = [];
+  
   public int Quantity { get; set; }
+  
   public decimal TotalPrice { get; set; }
 
   public string CustomerId { get; set; } = string.Empty;
 
-  public User Customer { get; set; } = new();
-
-  public Sale AssignToSale(Sale sale)
+  public Sale AssignTo(Sale sale)
   {
-    sale.Products = Products;
+    sale.Products = Products.ConvertAll(product => product.ToProduct());
     sale.Quantity = Quantity;
     sale.TotalPrice = TotalPrice;
     sale.CustomerId = CustomerId;
-    sale.Customer = Customer;
     return sale;
   }
 }
