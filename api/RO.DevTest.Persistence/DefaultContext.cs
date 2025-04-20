@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿namespace RO.DevTest.Persistence;
+
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using RO.DevTest.Domain.Entities;
+using Domain.Entities;
 
-namespace RO.DevTest.Persistence;
-
+/// <summary>
+/// Represents the database context used for the application, inheriting from <see cref="IdentityDbContext{TUser}"/> to support ASP.NET Core Identity functionality.
+/// Provides access to the application's entities and configurations.
+/// </summary>
 public class DefaultContext : IdentityDbContext<User> 
 {
     public DefaultContext() { }
@@ -13,9 +17,9 @@ public class DefaultContext : IdentityDbContext<User>
     public DbSet<Product> Products { get; set; }
     public DbSet<Sale> Sales { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        string connectionString = "Host=localhost;Port=5432;Database=devtest;Username=postgres;Password=root";
+        const string connectionString = "Host=localhost;Port=5432;Database=devtest;Username=postgres;Password=root";
         if (!optionsBuilder.IsConfigured) 
             optionsBuilder.UseNpgsql(connectionString);
     }

@@ -6,7 +6,8 @@ using MediatR;
 /// <summary>
 /// Validator for the UpdateProductCommand class.
 /// </summary>
-public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
+public class UpdateProductCommandValidator 
+  : AbstractValidator<UpdateProductCommand>
 {
   public UpdateProductCommandValidator()
   {

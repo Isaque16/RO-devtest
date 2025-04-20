@@ -1,8 +1,14 @@
 namespace RO.DevTest.Application.Features.User.Commands.UpdateUserCommand;
 
-public record UpdateUserResult
+public record UpdateUserResult(
+  string Id,
+  string Name,
+  string Email
+)
 {
-  public string Id { get; set; } = string.Empty;
-  public string Name { get; set; } = string.Empty;
-  public string Email { get; set; } = string.Empty;
+  public UpdateUserResult(Domain.Entities.User user) : this(
+    Id: user.Id,
+    Name: user.Name!,
+    Email: user.Email!
+  ) { }
 }

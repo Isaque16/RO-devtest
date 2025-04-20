@@ -5,7 +5,8 @@ using FluentValidation;
 /// <summary>
 /// Validator for the CreateProductCommand class.
 /// </summary>
-public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
+public class CreateProductCommandValidator 
+  : AbstractValidator<CreateProductCommand>
 {
   public CreateProductCommandValidator()
   {

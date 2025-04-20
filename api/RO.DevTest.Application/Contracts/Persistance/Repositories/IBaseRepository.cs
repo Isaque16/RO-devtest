@@ -5,7 +5,7 @@ namespace RO.DevTest.Application.Contracts.Persistance.Repositories;
 
 /// <summary>
 /// Generic repository interface for CRUD operations on entities of type <typeparamref name="T"/>.
-/// This interface provides methods for creating, reading, updating, and deleting entities,
+/// This interface provides methods for creating, reading, updating, and deleting entities.
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public interface IBaseRepository<T> where T : class 
@@ -38,7 +38,7 @@ public interface IBaseRepository<T> where T : class
     /// <summary>
     /// Creates a new entity in the database
     /// </summary>
-    /// <param name="entity"> The entity to be create </param>
+    /// <param name="entity"> The entity to be created </param>
     /// <param name="cancellationToken"> Cancellation token </param>
     /// <returns> The created entity </returns>
     Task<T> CreateAsync(T entity, CancellationToken cancellationToken = default);

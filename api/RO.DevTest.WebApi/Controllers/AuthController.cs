@@ -28,7 +28,8 @@ public class AuthController(IMediator mediator) : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Erro ao realizar login.", Details = ex.Message });
+            return StatusCode(StatusCodes.Status500InternalServerError, 
+                new { Message = "Erro ao realizar login.", Details = ex.Message });
         }
     }
 }

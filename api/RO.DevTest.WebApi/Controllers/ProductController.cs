@@ -34,7 +34,8 @@ public class ProductController(IMediator mediator) : ControllerBase
     }
     catch (Exception ex)
     {
-      return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Erro ao buscar produtos.", Details = ex.Message });
+      return StatusCode(StatusCodes.Status500InternalServerError, 
+        new { Message = "Erro ao buscar produtos.", Details = ex.Message });
     }
   }
 
@@ -54,12 +55,12 @@ public class ProductController(IMediator mediator) : ControllerBase
       var product = await mediator.Send(new GetProductByIdQuery(id));
       if (product == null)
         return NotFound(new { Message = "Produto não encontrado." });
-
       return Ok(product);
     }
     catch (Exception ex)
     {
-      return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Erro ao buscar o produto.", Details = ex.Message });
+      return StatusCode(StatusCodes.Status500InternalServerError, 
+        new { Message = "Erro ao buscar o produto.", Details = ex.Message });
     }
   }
 
@@ -80,7 +81,8 @@ public class ProductController(IMediator mediator) : ControllerBase
     }
     catch (Exception ex)
     {
-      return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Erro ao criar o produto.", Details = ex.Message });
+      return StatusCode(StatusCodes.Status500InternalServerError, 
+        new { Message = "Erro ao criar o produto.", Details = ex.Message });
     }
   }
 
@@ -101,7 +103,8 @@ public class ProductController(IMediator mediator) : ControllerBase
     }
     catch (Exception ex)
     {
-      return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Erro ao atualizar o produto.", Details = ex.Message });
+      return StatusCode(StatusCodes.Status500InternalServerError, 
+        new { Message = "Erro ao atualizar o produto.", Details = ex.Message });
     }
   }
 
@@ -123,7 +126,8 @@ public class ProductController(IMediator mediator) : ControllerBase
     }
     catch (Exception ex)
     {
-      return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Erro ao deletar o produto.", Details = ex.Message });
+      return StatusCode(StatusCodes.Status500InternalServerError, 
+        new { Message = "Erro ao deletar o produto.", Details = ex.Message });
     }
   }
 }

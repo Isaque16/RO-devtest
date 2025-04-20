@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
+using Application.Features.User.Queries;
 using Application.Features.User.Commands.CreateUserCommand;
 using Application.Features.User.Commands.DeleteUserCommand;
 using Application.Features.User.Queries.GetAllUsersQuery;
@@ -21,7 +22,7 @@ public class UsersController(IMediator mediator) : ControllerBase
     /// <param name="pagination">Parâmetros de paginação.</param>
     /// <returns>Lista paginada de usuários.</returns>
     [HttpGet]
-    [ProducesResponseType(typeof(PaginatedResult<GetAllUserResult>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PaginatedResult<GetUserResult>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAllUsers([FromQuery] PaginationQuery pagination)
     {
@@ -32,7 +33,8 @@ public class UsersController(IMediator mediator) : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Erro ao buscar usuários.", Details = ex.Message });
+            return StatusCode(StatusCodes.Status500InternalServerError, 
+                new { Message = "Erro ao buscar usuários.", Details = ex.Message });
         }
     }
 
@@ -42,7 +44,7 @@ public class UsersController(IMediator mediator) : ControllerBase
     /// <param name="id">ID do usuário.</param>
     /// <returns>O usuário correspondente ao ID.</returns>
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(GetUserByIdResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GetUserResult), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetUserById(string id)
@@ -52,12 +54,12 @@ public class UsersController(IMediator mediator) : ControllerBase
             var user = await mediator.Send(new GetUserByIdQuery(id));
             if (user == null)
                 return NotFound(new { Message = "Usuário não encontrado." });
-
             return Ok(user);
         }
         catch (Exception ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Erro ao buscar o usuário.", Details = ex.Message });
+            return StatusCode(StatusCodes.Status500InternalServerError, 
+                new { Message = "Erro ao buscar o usuário.", Details = ex.Message });
         }
     }
 
@@ -78,7 +80,8 @@ public class UsersController(IMediator mediator) : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Erro ao criar o usuário.", Details = ex.Message });
+            return StatusCode(StatusCodes.Status500InternalServerError, 
+                new { Message = "Erro ao criar o usuário.", Details = ex.Message });
         }
     }
 
@@ -99,7 +102,8 @@ public class UsersController(IMediator mediator) : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Erro ao atualizar o usuário.", Details = ex.Message });
+            return StatusCode(StatusCodes.Status500InternalServerError, 
+                new { Message = "Erro ao atualizar o usuário.", Details = ex.Message });
         }
     }
 
@@ -121,7 +125,8 @@ public class UsersController(IMediator mediator) : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Erro ao deletar o usuário.", Details = ex.Message });
+            return StatusCode(StatusCodes.Status500InternalServerError, 
+                new { Message = "Erro ao deletar o usuário.", Details = ex.Message });
         }
     }
 }

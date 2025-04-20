@@ -3,7 +3,8 @@ namespace RO.DevTest.Application.Features.Sale.Queries.GetAllSalesQuery;
 using MediatR;
 using Domain.Entities;
 
-public class GetAllSalesQuery(PaginationQuery pagination) : IRequest<PaginatedResult<Sale>>
+public class GetAllSalesQuery(PaginationQuery pagination) 
+    : IRequest<PaginatedResult<Sale>>
 {
     public PaginationQuery Pagination { get; set; } = pagination;
 }

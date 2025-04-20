@@ -15,7 +15,8 @@ using Domain.Entities;
 /// <param name="saleRepo">
 /// Injected instance of <see cref="ISaleRepository"/> used to access sales data from the underlying data source.
 /// </param>
-public class GetAllSalesQueryHandler(ISaleRepository saleRepo) : IRequestHandler<GetAllSalesQuery, PaginatedResult<Sale>>
+public class GetAllSalesQueryHandler(ISaleRepository saleRepo) 
+  : IRequestHandler<GetAllSalesQuery, PaginatedResult<Sale>>
 {
   /// <summary>
   /// Handles the execution of the <see cref="GetAllSalesQuery"/> to retrieve a paginated list of sales.

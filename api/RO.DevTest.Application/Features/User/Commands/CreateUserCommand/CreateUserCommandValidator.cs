@@ -1,8 +1,9 @@
-﻿using FluentValidation;
+﻿namespace RO.DevTest.Application.Features.User.Commands.CreateUserCommand;
 
-namespace RO.DevTest.Application.Features.User.Commands.CreateUserCommand;
+using FluentValidation;
 
-public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand> 
+public class CreateUserCommandValidator 
+    : AbstractValidator<CreateUserCommand> 
 {
     public CreateUserCommandValidator() 
     {

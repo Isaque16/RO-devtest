@@ -37,10 +37,10 @@ public class UpdateUserCommandHandler(IUserRepository userRepo) : IRequestHandle
 
     var updatedUser = await userRepo.UpdateAsync(user) ?? throw new Exception($"Failed to update user with id {request.Id}.");
     return new UpdateUserResult
-    {
-      Id = updatedUser.Id,
-      Name = updatedUser.Name,
-      Email = updatedUser.Email!,
-    };
+    (
+      Id: updatedUser.Id,
+      Name: updatedUser.Name,
+      Email: updatedUser.Email!
+    );
   }
 }

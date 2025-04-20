@@ -2,7 +2,8 @@ namespace RO.DevTest.Application.Features.User.Commands.UpdateUserCommand;
 
 using FluentValidation;
 
-public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
+public class UpdateUserCommandValidator 
+  : AbstractValidator<UpdateUserCommand>
 {
   public UpdateUserCommandValidator()
   {

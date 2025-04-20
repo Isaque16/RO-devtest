@@ -22,7 +22,7 @@ public class User : IdentityUser
     /// List of sales made by the user
     /// </summary>
     /// <remarks>Used for displaying the sales made by the user</remarks>
-    ICollection<Sale> Sales { get; set; } = [];
+    ICollection<string> SalesId { get; } = [];
 
     public User() : base() { }
 }

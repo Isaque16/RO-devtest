@@ -8,7 +8,8 @@ using Contracts.Persistance.Repositories;
 /// This handler leverages the <see cref="IUserRepository"/> for database operations and
 /// implements <see cref="IRequestHandler{TRequest, TResponse}"/> to process the <see cref="DeleteUserCommand"/>.
 /// </summary>
-public class DeleteUserCommandHandler(IUserRepository userRepo) : IRequestHandler<DeleteUserCommand, bool>
+public class DeleteUserCommandHandler(IUserRepository userRepo) 
+  : IRequestHandler<DeleteUserCommand, bool>
 {
   /// <summary>
   /// Processes the deletion of a user based on the provided <see cref="DeleteUserCommand"/>.
@@ -16,8 +17,8 @@ public class DeleteUserCommandHandler(IUserRepository userRepo) : IRequestHandle
   /// <param name="request">The command containing the user ID to be deleted.</param>
   /// <param name="cancellationToken">Token to observe for cancellation requests.</param>
   /// <returns>A boolean value indicating whether the user was successfully deleted.</returns>
-  public async Task<bool> Handle(DeleteUserCommand request,
-    CancellationToken cancellationToken)
+  public async Task<bool> Handle(
+    DeleteUserCommand request, CancellationToken cancellationToken)
   {
     if (string.IsNullOrEmpty(request.Id)) return false;
     
