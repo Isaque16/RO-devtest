@@ -13,49 +13,117 @@ using Application.Features.Product.Commands.UpdateProductCommand;
 using Application.Features.Product.Commands.DeleteProductCommand;
 
 [Route("api/products")]
-[OpenApiTag("Products")]
-public class ProductController(IMediator mediator) : ControllerBase 
+[OpenApiTag("Products", Description = "Endpoints para gerenciar produtos.")]
+[ApiController]
+public class ProductController(IMediator mediator) : ControllerBase
 {
+  /// <summary>
+  /// Obtém todos os produtos com paginação.
+  /// </summary>
+  /// <param name="pagination">Parâmetros de paginação.</param>
+  /// <returns>Lista paginada de produtos.</returns>
   [HttpGet]
   [ProducesResponseType(typeof(PaginatedResult<Product>), StatusCodes.Status200OK)]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> GetAllProducts([FromQuery] PaginationQuery pagination)
   {
-    var products = await mediator.Send(new GetAllProductsQuery(pagination)); 
-    return Ok(products);
+    try
+    {
+      var products = await mediator.Send(new GetAllProductsQuery(pagination));
+      return Ok(products);
+    }
+    catch (Exception ex)
+    {
+      return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Erro ao buscar produtos.", Details = ex.Message });
+    }
   }
 
-  [HttpGet("{id}")]
+  /// <summary>
+  /// Obtém um produto pelo ID.
+  /// </summary>
+  /// <param name="id">ID do produto.</param>
+  /// <returns>O produto correspondente ao ID.</returns>
+  [HttpGet("{id:guid}")]
   [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
-  public async Task<IActionResult> GetProduct(string id)
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+  public async Task<IActionResult> GetProduct(Guid id)
   {
-    var product = await mediator.Send(new GetProductByIdQuery(id));
-    return Ok(product);
+    try
+    {
+      var product = await mediator.Send(new GetProductByIdQuery(id));
+      if (product == null)
+        return NotFound(new { Message = "Produto não encontrado." });
+
+      return Ok(product);
+    }
+    catch (Exception ex)
+    {
+      return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Erro ao buscar o produto.", Details = ex.Message });
+    }
   }
 
+  /// <summary>
+  /// Cria um novo produto.
+  /// </summary>
+  /// <param name="product">Dados do produto a ser criado.</param>
+  /// <returns>O produto criado.</returns>
   [HttpPost]
   [ProducesResponseType(typeof(Product), StatusCodes.Status201Created)]
-  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommand product)
   {
-    var createdProduct = await mediator.Send(product);
-    return Created(HttpContext.Request.GetDisplayUrl(), createdProduct);
+    try
+    {
+      var createdProduct = await mediator.Send(product);
+      return Created(HttpContext.Request.GetDisplayUrl(), createdProduct);
+    }
+    catch (Exception ex)
+    {
+      return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Erro ao criar o produto.", Details = ex.Message });
+    }
   }
 
+  /// <summary>
+  /// Atualiza um produto existente.
+  /// </summary>
+  /// <param name="product">Dados do produto a ser atualizado.</param>
+  /// <returns>O produto atualizado.</returns>
   [HttpPut]
   [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
-  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductCommand product)
   {
-    var updatedProduct = await mediator.Send(product);
-    return Ok(updatedProduct);
+    try
+    {
+      var updatedProduct = await mediator.Send(product);
+      return Ok(updatedProduct);
+    }
+    catch (Exception ex)
+    {
+      return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Erro ao atualizar o produto.", Details = ex.Message });
+    }
   }
 
-  [HttpDelete("{id}")]
+  /// <summary>
+  /// Deleta um produto pelo ID.
+  /// </summary>
+  /// <param name="id">ID do produto a ser deletado.</param>
+  /// <returns>Confirmação da exclusão.</returns>
+  [HttpDelete("{id:guid}")]
   [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
-  [ProducesResponseType(StatusCodes.Status204NoContent)]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> DeleteProduct(Guid id)
   {
-    var result = await mediator.Send(new DeleteProductCommand(id));
-    return result ? Ok() : NotFound();
+    try
+    {
+      var result = await mediator.Send(new DeleteProductCommand(id));
+      return result ? Ok() : NotFound(new { Message = "Produto não encontrado." });
+    }
+    catch (Exception ex)
+    {
+      return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Erro ao deletar o produto.", Details = ex.Message });
+    }
   }
 }
