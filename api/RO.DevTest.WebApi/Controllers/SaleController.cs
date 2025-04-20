@@ -1,15 +1,17 @@
 namespace RO.DevTest.WebApi.Controllers;
 
-using Application.Features;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
+using Domain.Entities;
 using NSwag.Annotations;
+using Application.Features;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Extensions;
 using Application.Features.Sale.Commands.DeleteSaleCommand;
 using Application.Features.Sale.Commands.UpdateSaleCommand;
 using Application.Features.Sale.Queries.GetAllSalesQuery;
 using Application.Features.Sale.Queries.GetSaleByIdQuery;
 using Application.Features.Sale.Queries.GetAllSalesByPeriodQuery;
-using Domain.Entities;
+using Application.Features.Sale.Commands.CreateSaleCommand;
 
 [Route("api/sales")]
 [OpenApiTag("Sales", Description = "Endpoints para gerenciar vendas.")]
@@ -24,7 +26,7 @@ public class SaleController(IMediator mediator) : ControllerBase
   [HttpGet]
   [ProducesResponseType(typeof(PaginatedResult<Sale>), StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public async Task<IActionResult> GetSales([FromQuery] PaginationQuery pagination)
+  public async Task<IActionResult> GetAllSales([FromQuery] PaginationQuery pagination)
   {
     try
     {
@@ -45,7 +47,7 @@ public class SaleController(IMediator mediator) : ControllerBase
   /// <returns>Lista paginada das vendas no período especificado.</returns>
   [HttpGet("period")]
   [ProducesResponseType(typeof(GetAllSalesByPeriodResult), StatusCodes.Status200OK)]
-  public async Task<IActionResult> GetSalesByPeriod(
+  public async Task<IActionResult> GetAllSalesByPeriod(
     [FromBody] DateTimeRange dateTimeRange, [FromQuery] PaginationQuery pagination)
   {
     try
@@ -76,13 +78,34 @@ public class SaleController(IMediator mediator) : ControllerBase
       var sale = await mediator.Send(new GetSaleByIdQuery(id));
       if (sale == null)
         return NotFound(new { Message = "Venda não encontrada." });
-
       return Ok(sale);
     }
     catch (Exception ex)
     {
       return StatusCode(StatusCodes.Status500InternalServerError, 
         new { Message = "Erro ao buscar a venda.", Details = ex.Message });
+    }
+  }
+
+  /// <summary>
+  /// Cria uma nova venda.
+  /// </summary>
+  /// <param name="sale">Comando contendo os detalhes da venda a ser criada.</param>
+  /// <returns>A venda criada.</returns>
+  [HttpPost]
+  [ProducesResponseType(typeof(Sale), StatusCodes.Status201Created)]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+  public async Task<IActionResult> CreateSale([FromBody] CreateSaleCommand sale)
+  {
+    try
+    {
+      var createdSale = await mediator.Send(sale);
+      return Created(HttpContext.Request.GetDisplayUrl(), createdSale);
+    }
+    catch (Exception ex)
+    {
+      return StatusCode(StatusCodes.Status500InternalServerError, 
+        new { Message = "Erro ao criar a venda.", Details = ex.Message });
     }
   }
 
