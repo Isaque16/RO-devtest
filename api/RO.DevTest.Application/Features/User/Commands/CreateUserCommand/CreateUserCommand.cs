@@ -1,7 +1,8 @@
-﻿using MediatR;
-using RO.DevTest.Domain.Enums;
+﻿namespace RO.DevTest.Application.Features.User.Commands.CreateUserCommand;
 
-namespace RO.DevTest.Application.Features.User.Commands.CreateUserCommand;
+using MediatR;
+using RO.DevTest.Domain.Entities;
+using RO.DevTest.Domain.Enums;
 
 public class CreateUserCommand : IRequest<CreateUserResult> 
 {
@@ -12,9 +13,9 @@ public class CreateUserCommand : IRequest<CreateUserResult>
     public string PasswordConfirmation { get; set; } = string.Empty;
     public UserRoles Role { get; set; }
 
-    public Domain.Entities.User AssignTo() 
+    public User AssignTo() 
     {
-        return new Domain.Entities.User 
+        return new User 
         {
             UserName = UserName,
             Email = Email,

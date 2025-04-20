@@ -7,8 +7,6 @@ public record CreateUserResult
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
 
-    public CreateUserResult () { }
-
     public CreateUserResult(Domain.Entities.User user) 
     { 
         Id = user.Id;
