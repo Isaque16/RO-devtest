@@ -1,4 +1,5 @@
 namespace RO.DevTest.Application.Features.Sale.Commands.UpdateSaleCommand;
+
 using FluentValidation;
 
 public class UpdateSaleCommandValidator : AbstractValidator<UpdateSaleCommand>

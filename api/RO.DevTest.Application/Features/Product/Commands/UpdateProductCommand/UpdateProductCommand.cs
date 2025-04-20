@@ -1,6 +1,7 @@
 namespace RO.DevTest.Application.Features.Product.Commands.UpdateProductCommand;
+
 using MediatR;
-using RO.DevTest.Domain.Entities;
+using Domain.Entities;
 
 /// <summary>
 /// Command to update a product.

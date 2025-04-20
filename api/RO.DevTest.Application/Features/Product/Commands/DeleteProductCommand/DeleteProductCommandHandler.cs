@@ -1,7 +1,7 @@
-using MediatR;
-using RO.DevTest.Application.Contracts.Persistance.Repositories;
-
 namespace RO.DevTest.Application.Features.Product.Commands.DeleteProductCommand;
+
+using MediatR;
+using Contracts.Persistance.Repositories;
 
 public class DeleteProductCommandHandler(IProductRepository productRepository) : IRequestHandler<DeleteProductCommand, bool>
 {

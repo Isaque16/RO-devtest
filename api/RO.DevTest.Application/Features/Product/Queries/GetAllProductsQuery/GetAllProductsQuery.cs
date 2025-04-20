@@ -1,7 +1,6 @@
 namespace RO.DevTest.Application.Features.Product.Queries.GetAllProductsQuery;
 
 using MediatR;
-using RO.DevTest.Application.Features.User.Queries;
 
 /// <summary>
 /// Query to retrieve all products with pagination.

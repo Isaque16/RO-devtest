@@ -1,14 +1,16 @@
-using MediatR;
-using RO.DevTest.Application.Contracts.Persistance.Repositories;
-using RO.DevTest.Domain.Exception;
+using FluentValidation;
 
 namespace RO.DevTest.Application.Features.User.Commands.UpdateUserCommand;
+
+using Contracts.Persistance.Repositories;
+using RO.DevTest.Domain.Exception;
+using MediatR;
 
 /// <summary>
 /// Handler for updating a user.
 /// </summary>
-/// <param name="userRepository"></param>
-public class UpdateUserCommandHandler(IUserRepository userRepository) : IRequestHandler<UpdateUserCommand, UpdateUserResult>
+/// <param name="userRepo"></param>
+public class UpdateUserCommandHandler(IUserRepository userRepo) : IRequestHandler<UpdateUserCommand, UpdateUserResult>
 {
   /// <summary>
   /// Handles the update user command.
@@ -28,12 +30,12 @@ public class UpdateUserCommandHandler(IUserRepository userRepository) : IRequest
     var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
     if (!validationResult.IsValid)
-      throw new BadRequestException(validationResult);
+      throw new ValidationException($"{validationResult.Errors.Count} validation errors occurred.", validationResult.Errors);
     
-    var user = await userRepository.GetByIdAsync(request.Id, cancellationToken) ?? throw new KeyNotFoundException($"User with id {request.Id} not found.");
+    var user = await userRepo.GetByIdAsync(request.Id, cancellationToken) ?? throw new KeyNotFoundException($"User with id {request.Id} not found.");
     user = request.AssignTo(user);
 
-    var updatedUser = await userRepository.UpdateAsync(user) ?? throw new Exception($"Failed to update user with id {request.Id}.");
+    var updatedUser = await userRepo.UpdateAsync(user) ?? throw new Exception($"Failed to update user with id {request.Id}.");
     return new UpdateUserResult
     {
       Id = updatedUser.Id,

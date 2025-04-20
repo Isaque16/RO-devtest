@@ -1,8 +1,8 @@
 ﻿namespace RO.DevTest.Application.Features.User.Commands.CreateUserCommand;
 
 using MediatR;
-using RO.DevTest.Domain.Entities;
-using RO.DevTest.Domain.Enums;
+using Domain.Entities;
+using Domain.Enums;
 
 public class CreateUserCommand : IRequest<CreateUserResult> 
 {

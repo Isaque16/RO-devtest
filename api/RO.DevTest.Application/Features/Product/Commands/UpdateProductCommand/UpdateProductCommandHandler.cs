@@ -1,3 +1,5 @@
+using FluentValidation;
+
 namespace RO.DevTest.Application.Features.Product.Commands.UpdateProductCommand;
 using MediatR;
 using RO.DevTest.Application.Contracts.Persistance.Repositories;
@@ -28,7 +30,7 @@ public class UpdateProductCommandHandler(IProductRepository productRepository) :
     var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
     if (!validationResult.IsValid) 
-      throw new BadRequestException(validationResult);
+      throw new ValidationException($"{validationResult.Errors.Count} validation errors occurred.", validationResult.Errors);
     
     var product = await productRepository.GetByIdAsync(request.Id, cancellationToken) ?? throw new KeyNotFoundException($"Product with ID {request.Id} not found.");
     product = request.AssignTo(product);

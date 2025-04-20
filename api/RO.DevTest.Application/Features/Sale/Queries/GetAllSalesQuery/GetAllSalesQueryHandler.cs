@@ -12,10 +12,10 @@ using Domain.Entities;
 /// This handler processes the <see cref="GetAllSalesQuery"/> request and returns a <see cref="PaginatedResult{T}"/>
 /// containing a list of sales and associated metadata such as total count, page number, and page size.
 /// </remarks>
-/// <param name="saleRepository">
+/// <param name="saleRepo">
 /// Injected instance of <see cref="ISaleRepository"/> used to access sales data from the underlying data source.
 /// </param>
-public class GetAllSalesQueryHandler(ISaleRepository saleRepository) : IRequestHandler<GetAllSalesQuery, PaginatedResult<Sale>>
+public class GetAllSalesQueryHandler(ISaleRepository saleRepo) : IRequestHandler<GetAllSalesQuery, PaginatedResult<Sale>>
 {
   /// <summary>
   /// Handles the execution of the <see cref="GetAllSalesQuery"/> to retrieve a paginated list of sales.
@@ -33,7 +33,7 @@ public class GetAllSalesQueryHandler(ISaleRepository saleRepository) : IRequestH
   public async Task<PaginatedResult<Sale>> Handle(GetAllSalesQuery request,
     CancellationToken cancellationToken)
   {
-    var sales = await saleRepository.GetAllPagedAsync(request.Pagination, cancellationToken);
+    var sales = await saleRepo.GetAllPagedAsync(request.Pagination, cancellationToken);
     return new PaginatedResult<Sale>(sales.Content, sales.TotalCount, sales.PageNumber, sales.PageSize);
   }
 }

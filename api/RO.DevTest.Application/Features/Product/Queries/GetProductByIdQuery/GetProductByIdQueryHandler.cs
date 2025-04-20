@@ -7,8 +7,8 @@ using Domain.Entities;
 /// <summary>
 /// Handles the query to get a product by its ID.
 /// </summary>
-/// <param name="productRepository"></param>
-public class GetProductByIdQueryHandler(IProductRepository productRepository) : IRequestHandler<GetProductByIdQuery, Product>
+/// <param name="productRepo"></param>
+public class GetProductByIdQueryHandler(IProductRepository productRepo) : IRequestHandler<GetProductByIdQuery, Product>
 {
   /// <summary>
   /// Handles the request to get a product by its ID.
@@ -21,6 +21,6 @@ public class GetProductByIdQueryHandler(IProductRepository productRepository) : 
   /// <exception cref="KeyNotFoundException"></exception>
   public async Task<Product> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
   {
-    return await productRepository.GetByIdAsync(request.Id, cancellationToken) ?? throw new KeyNotFoundException($"Produto com ID {request.Id} não foi encontrado.");
+    return await productRepo.GetByIdAsync(request.Id, cancellationToken) ?? throw new KeyNotFoundException($"Produto com ID {request.Id} não foi encontrado.");
   }
 }

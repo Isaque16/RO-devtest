@@ -1,4 +1,5 @@
 ﻿namespace RO.DevTest.Domain.Abstract;
+
 public abstract class BaseEntity {
     public Guid Id { get; set; } = Guid.NewGuid();
 

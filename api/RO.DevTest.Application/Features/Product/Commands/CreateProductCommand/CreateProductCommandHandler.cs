@@ -1,3 +1,5 @@
+using FluentValidation;
+
 namespace RO.DevTest.Application.Features.Product.Commands.CreateProductCommand;
 
 using RO.DevTest.Application.Contracts.Persistance.Repositories;
@@ -11,8 +13,8 @@ using RO.DevTest.Domain.Exception;
 /// <remarks>
 /// Initializes a new instance of the <see cref="CreateProductCommandHandler"/> class.
 /// </remarks>
-/// <param name="productRepository">The repository for managing products.</param>
-public class CreateProductCommandHandler(IProductRepository productRepository) : IRequestHandler<CreateProductCommand, Product>
+/// <param name="productRepo">The repository for managing products.</param>
+public class CreateProductCommandHandler(IProductRepository productRepo) : IRequestHandler<CreateProductCommand, Product>
 {
   /// <summary>
   /// Handles the creation of a new product.
@@ -26,10 +28,10 @@ public class CreateProductCommandHandler(IProductRepository productRepository) :
     var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
     if (!validationResult.IsValid)
-      throw new BadRequestException(validationResult);
+      throw new ValidationException($"{validationResult.Errors.Count} validation errors occurred.", validationResult.Errors);
     
     var product = request.AssignTo();
 
-    return await productRepository.CreateAsync(product, cancellationToken);
+    return await productRepo.CreateAsync(product, cancellationToken);
   }
 }

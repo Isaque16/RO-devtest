@@ -1,7 +1,7 @@
 namespace RO.DevTest.Application.Features.Sale.Commands.CreateSaleCommand;
 
 using MediatR;
-using RO.DevTest.Domain.Entities;
+using Domain.Entities;
 
 public class CreateSaleCommand : IRequest<Sale>
 {

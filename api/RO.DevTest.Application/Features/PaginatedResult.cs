@@ -1,6 +1,6 @@
-using MediatR;
-
 namespace RO.DevTest.Application.Features;
+
+using MediatR;
 
 public class PaginatedResult<T>(List<T> content, int totalCount, int pageNumber, int pageSize) : IRequest<PaginatedResult<T>>
 {

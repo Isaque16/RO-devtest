@@ -1,6 +1,6 @@
-using RO.DevTest.Domain.Abstract;
-
 namespace RO.DevTest.Domain.Entities;
+
+using Abstract;
 
 /// <summary>
 /// Represents a <see cref="Sale"/> in the API.

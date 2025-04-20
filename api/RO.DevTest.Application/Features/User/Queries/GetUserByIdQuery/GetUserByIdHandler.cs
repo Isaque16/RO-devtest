@@ -1,8 +1,7 @@
-using RO.DevTest.Application.Contracts.Persistance.Repositories;
+namespace RO.DevTest.Application.Features.User.Queries.GetUserByIdQuery;
 
 using MediatR;
-
-namespace RO.DevTest.Application.Features.User.Queries.GetUserByIdQuery;
+using Contracts.Persistance.Repositories;
 
 public class GetUserByIdQueryHandler(IUserRepository userRepository) : IRequestHandler<GetUserByIdQuery, GetUserByIdResult>
 {
@@ -12,7 +11,7 @@ public class GetUserByIdQueryHandler(IUserRepository userRepository) : IRequestH
     
     return new GetUserByIdResult {
       Id = user.Id,
-      Name = user.Name ?? string.Empty,
+      Name = user.Name,
       Email = user.Email ?? string.Empty,
     };
   }
