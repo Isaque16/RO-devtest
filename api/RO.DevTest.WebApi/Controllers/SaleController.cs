@@ -8,6 +8,7 @@ using Application.Features.Sale.Commands.DeleteSaleCommand;
 using Application.Features.Sale.Commands.UpdateSaleCommand;
 using Application.Features.Sale.Queries.GetAllSalesQuery;
 using Application.Features.Sale.Queries.GetSaleByIdQuery;
+using Application.Features.Sale.Queries.GetAllSalesByPeriodQuery;
 using Domain.Entities;
 
 [Route("api/sales")]
@@ -37,6 +38,29 @@ public class SaleController(IMediator mediator) : ControllerBase
   }
 
   /// <summary>
+  /// Obtém todas as vendas em um período específico com paginação.
+  /// </summary>
+  /// <param name="dateTimeRange">Intervalo de datas para filtrar as vendas.</param>
+  /// <param name="pagination">Parâmetros de paginação.</param>
+  /// <returns>Lista paginada das vendas no período especificado.</returns>
+  [HttpGet("period")]
+  [ProducesResponseType(typeof(GetAllSalesByPeriodResult), StatusCodes.Status200OK)]
+  public async Task<IActionResult> GetSalesByPeriod(
+    [FromBody] DateTimeRange dateTimeRange, [FromQuery] PaginationQuery pagination)
+  {
+    try
+    {
+      var sales = await mediator.Send(new GetAllSalesByPeriodQuery(dateTimeRange, pagination));
+      return Ok(sales);
+    }
+    catch (Exception ex)
+    {
+      return StatusCode(StatusCodes.Status500InternalServerError, 
+        new { Message = "Erro ao buscar vendas.", Details = ex.Message });
+    }
+  }
+
+  /// <summary>
   /// Obtém uma venda pelo ID.
   /// </summary>
   /// <param name="id">ID da venda.</param>
@@ -57,7 +81,8 @@ public class SaleController(IMediator mediator) : ControllerBase
     }
     catch (Exception ex)
     {
-      return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Erro ao buscar a venda.", Details = ex.Message });
+      return StatusCode(StatusCodes.Status500InternalServerError, 
+        new { Message = "Erro ao buscar a venda.", Details = ex.Message });
     }
   }
 
@@ -79,7 +104,8 @@ public class SaleController(IMediator mediator) : ControllerBase
     }
     catch (Exception ex)
     {
-      return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Erro ao atualizar a venda.", Details = ex.Message });
+      return StatusCode(StatusCodes.Status500InternalServerError, 
+        new { Message = "Erro ao atualizar a venda.", Details = ex.Message });
     }
   }
 
@@ -101,7 +127,8 @@ public class SaleController(IMediator mediator) : ControllerBase
     }
     catch (Exception ex)
     {
-      return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Erro ao deletar a venda.", Details = ex.Message });
+      return StatusCode(StatusCodes.Status500InternalServerError, 
+        new { Message = "Erro ao deletar a venda.", Details = ex.Message });
     }
   }
 }
