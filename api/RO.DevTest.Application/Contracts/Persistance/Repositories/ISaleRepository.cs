@@ -7,5 +7,5 @@ using Domain.Entities;
 
 public interface ISaleRepository : IBaseRepository<Sale>
 {
-    public Task<List<Sale>> GetAllSalesByPeriodAsync(DateTimeRange dateTimeRange, PaginationQuery pagination);
-};
+    public Task<(List<Sale> pagedSales, int totalCount, decimal totalRevenue)> GetAllSalesByPeriodAsync(DateTimeRange dateTimeRange, PaginationQuery pagination);
+}

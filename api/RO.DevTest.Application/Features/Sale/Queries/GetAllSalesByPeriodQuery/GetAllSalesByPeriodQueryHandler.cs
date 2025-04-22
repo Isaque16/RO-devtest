@@ -41,20 +41,20 @@ public class GetAllSalesByPeriodQueryHandler(ISaleRepository saleRepo)
         
         if (!validationResult.IsValid)
             throw new ValidationException($"{validationResult.Errors.Count} validation errors occurred.", validationResult.Errors);
-        
-        var sales = await saleRepo.GetAllSalesByPeriodAsync(request.DateRange, request.Pagination);
 
-        var totalSalesCount = sales.Count;
-        var totalRevenue = sales.Sum(s => s.TotalPrice);
+        var (sales, totalSalesCount, totalRevenue) = await saleRepo.GetAllSalesByPeriodAsync(
+            request.DateRange, request.Pagination);
+
         var productRevenues = sales
-            .GroupBy(s => s.Id)
+            .SelectMany(s => s.Products)
+            .GroupBy(p => p.Id)
             .Select(g => new ProductRevenue(
                 g.Key,
-                "Unknown Product", // Placeholder for ProductName
-                g.Sum(s => s.TotalPrice)
+                g.First().Name,
+                g.Sum(p => p.Price * p.Quantity)
             ))
             .ToList();
 
         return new GetAllSalesByPeriodResult(totalSalesCount, totalRevenue, productRevenues);
+        }
     }
-}
