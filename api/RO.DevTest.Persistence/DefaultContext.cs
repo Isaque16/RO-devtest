@@ -19,7 +19,13 @@ public class DefaultContext : IdentityDbContext<User>
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        const string connectionString = "Host=localhost;Port=5432;Database=devtest;Username=postgres;Password=root";
+        const string host = "localhost";
+        const string port = "5432";
+        const string database = "devtest";
+        const string username = "postgres";
+        const string password = "root";
+        const string connectionString = $"Host={host};Port={port};Database={database};Username={username};Password={password}";
+        
         if (!optionsBuilder.IsConfigured) 
             optionsBuilder.UseNpgsql(connectionString);
     }
