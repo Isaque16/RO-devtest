@@ -1,3 +1,5 @@
+using RO.DevTest.Domain.Enums;
+
 namespace RO.DevTest.Application.Features.User.Queries.GetUserByIdQuery;
 
 using MediatR;
@@ -29,7 +31,10 @@ public class GetUserByIdQueryHandler(IUserRepository userRepo) :
     return new GetUserResult(
       Id: user.Id,
       Name: user.Name,
-      Email: user.Email ?? string.Empty
+      UserName: user.UserName!,
+      PhoneNumber: user.PhoneNumber!,
+      Email: user.Email!,
+      Role: UserRoles.Customer
     );
   }
 }

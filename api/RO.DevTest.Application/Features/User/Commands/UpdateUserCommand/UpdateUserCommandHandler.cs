@@ -1,4 +1,5 @@
-using FluentValidation;
+using System.ComponentModel.DataAnnotations;
+using ValidationException = FluentValidation.ValidationException;
 
 namespace RO.DevTest.Application.Features.User.Commands.UpdateUserCommand;
 
@@ -41,7 +42,9 @@ public class UpdateUserCommandHandler(IUserRepository userRepo) : IRequestHandle
       Id: updatedUser.Id,
       Name: updatedUser.Name,
       UserName: updatedUser.UserName!,
-      Email: updatedUser.Email!
+      Email: updatedUser.Email!,
+      PhoneNumber: updatedUser.PhoneNumber!,
+      Role: updatedUser.Role
     );
   }
 }

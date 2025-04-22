@@ -25,8 +25,9 @@ public class CreateUserCommand : IRequest<CreateUserResult>
             Name = Name,
             UserName = UserName,
             Password = Password,
-            PhoneNumber = PhoneNumber,
             Email = Email,
+            PhoneNumber = PhoneNumber,
+            Role = Role
         };
     }
 }

@@ -2,8 +2,8 @@ namespace RO.DevTest.Application.Features.Sale.Queries.GetSaleByIdQuery;
 
 using MediatR;
 
-public class GetSaleByIdQuery(string id) 
+public class GetSaleByIdQuery
   : IRequest<Domain.Entities.Sale>
 {
-  public string Id { get; set; } = id;
+  public Guid Id { get; set; } = Guid.Empty;
 }

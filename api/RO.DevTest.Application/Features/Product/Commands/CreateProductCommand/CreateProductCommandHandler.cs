@@ -31,7 +31,6 @@ public class CreateProductCommandHandler(IProductRepository productRepo)
       throw new ValidationException($"{validationResult.Errors.Count} validation errors occurred.", validationResult.Errors);
     
     var product = request.AssignTo();
-
     return await productRepo.CreateAsync(product, cancellationToken);
   }
 }

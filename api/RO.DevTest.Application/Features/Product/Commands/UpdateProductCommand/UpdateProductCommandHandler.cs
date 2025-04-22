@@ -1,6 +1,7 @@
 using FluentValidation;
 
 namespace RO.DevTest.Application.Features.Product.Commands.UpdateProductCommand;
+
 using MediatR;
 using RO.DevTest.Application.Contracts.Persistance.Repositories;
 using RO.DevTest.Domain.Entities;

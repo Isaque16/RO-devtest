@@ -1,6 +1,7 @@
 namespace RO.DevTest.Application.Features.User.Queries.GetAllUsersQuery;
 
 using MediatR;
+using Domain.Enums;
 using Contracts.Persistance.Repositories;
 
 /// <summary>
@@ -24,7 +25,10 @@ public class GetAllUsersQueryHandler(IUserRepository userRepo)
     (
       Id: user.Id,
       Name: user.Name,
-      Email: user.Email!
+      UserName: user.UserName!,
+      PhoneNumber: user.PhoneNumber!,
+      Email: user.Email!,
+      Role: UserRoles.Customer
     )).ToList();
     
     return new PaginatedResult<GetUserResult>(usersContent, users.TotalCount, users.PageNumber, users.PageSize);

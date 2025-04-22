@@ -1,7 +1,8 @@
+using MediatR;
+
 namespace RO.DevTest.Application.Features.Product.Commands.CreateProductCommand;
 
-using RO.DevTest.Domain.Entities;
-using MediatR;
+using Domain.Entities;
 
 /// <summary>
 /// Command to create a new <see cref="Product"/>

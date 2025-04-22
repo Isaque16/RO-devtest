@@ -20,7 +20,7 @@ public class DeleteUserCommandHandler(IUserRepository userRepo)
   public async Task<bool> Handle(
     DeleteUserCommand request, CancellationToken cancellationToken)
   {
-    if (string.IsNullOrEmpty(request.Id)) return false;
+    if (request.Id == string.Empty) return false;
     
     var user = await userRepo.GetByIdAsync(request.Id, cancellationToken);
     if (user == null) return false;

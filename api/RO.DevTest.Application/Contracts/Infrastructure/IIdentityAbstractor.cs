@@ -63,7 +63,7 @@ public interface IIdentityAbstractor
     Task<IList<string>> GetUserRolesAsync(User user);
 
     /// <summary>
-    /// Signs in a <see cref="User"/> asynchronously in a non
+    /// Signs in a <see cref="User"/> asynchronously in a non-
     /// persistent way. The <see cref="User"/>'s account is not
     /// locked if failed
     /// </summary>

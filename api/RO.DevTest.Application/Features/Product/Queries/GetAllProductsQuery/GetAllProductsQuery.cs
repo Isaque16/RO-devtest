@@ -10,6 +10,7 @@ using MediatR;
 /// page size, sorting options, and the sort order. It returns a <see cref="PaginatedResult{T}"/> containing a list
 /// of products and their associated metadata (e.g., total count and total pages).
 /// </remarks>
-public class GetAllProductsQuery(PaginationQuery paginationQuery) : IRequest<PaginatedResult<Domain.Entities.Product>> { 
-    public PaginationQuery PaginationQuery { get; set; } = paginationQuery;
+public class GetAllProductsQuery : IRequest<PaginatedResult<Domain.Entities.Product>>
+{
+    public PaginationQuery PaginationQuery { get; set; } = new();
 }
