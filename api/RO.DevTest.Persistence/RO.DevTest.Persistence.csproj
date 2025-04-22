@@ -22,4 +22,8 @@
     <ProjectReference Include="..\RO.DevTest.Domain\RO.DevTest.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

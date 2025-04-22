@@ -6,6 +6,4 @@ public abstract class BaseEntity {
     public DateTime CreatedOn { get; init; } = DateTime.UtcNow;
     
     public DateTime ModifiedOn { get; set; } = DateTime.UtcNow;
-
-    protected BaseEntity() { }
 }
