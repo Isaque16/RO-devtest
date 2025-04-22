@@ -1,4 +1,6 @@
-﻿namespace RO.DevTest.WebApi.Controllers;
+﻿using RO.DevTest.Application.Features.User.Commands.UpdateUserCommand;
+
+namespace RO.DevTest.WebApi.Controllers;
 
 using Application.Features;
 using MediatR;
@@ -11,122 +13,123 @@ using Application.Features.User.Commands.DeleteUserCommand;
 using Application.Features.User.Queries.GetAllUsersQuery;
 using Application.Features.User.Queries.GetUserByIdQuery;
 
+/// <summary>
+/// Controller responsible for managing users.
+/// </summary>
 [Route("api/user")]
-[OpenApiTag("Users", Description = "Endpoints para gerenciar usuários.")]
+[OpenApiTag("Users", Description = "Endpoints to manage users.")]
 [ApiController]
 public class UsersController(IMediator mediator) : ControllerBase
 {
     /// <summary>
-    /// Obtém todos os usuários com paginação.
+    /// Retrieves all users with pagination.
     /// </summary>
-    /// <param name="pagination">Parâmetros de paginação.</param>
-    /// <returns>Lista paginada de usuários.</returns>
+    /// <param name="pagination">Pagination parameters.</param>
+    /// <returns>A paginated list of users.</returns>
     [HttpGet]
     [ProducesResponseType(typeof(PaginatedResult<GetUserResult>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetAllUsers([FromQuery] PaginationQuery pagination)
+    public async Task<IActionResult> GetAllUsers([FromQuery] GetAllUsersQuery pagination)
     {
         try
         {
-            var users = await mediator.Send(new GetAllUsersQuery(pagination));
+            var users = await mediator.Send(pagination);
             return Ok(users);
         }
         catch (Exception ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, 
-                new { Message = "Erro ao buscar usuários.", Details = ex.Message });
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                new { Message = "Error retrieving users.", Details = ex.Message });
         }
     }
 
     /// <summary>
-    /// Obtém um usuário pelo ID.
+    /// Retrieves a user by their ID.
     /// </summary>
-    /// <param name="id">ID do usuário.</param>
-    /// <returns>O usuário correspondente ao ID.</returns>
+    /// <param name="id">The ID of the user.</param>
+    /// <returns>The user corresponding to the given ID.</returns>
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(GetUserResult), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetUserById(string id)
+    public async Task<IActionResult> GetUserById(GetUserByIdQuery id)
     {
         try
         {
-            var user = await mediator.Send(new GetUserByIdQuery(id));
-            if (user == null)
-                return NotFound(new { Message = "Usuário não encontrado." });
+            var user = await mediator.Send(id);
             return Ok(user);
         }
         catch (Exception ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, 
-                new { Message = "Erro ao buscar o usuário.", Details = ex.Message });
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                new { Message = "Error retrieving the user.", Details = ex.Message });
         }
     }
 
     /// <summary>
-    /// Cria um novo usuário.
+    /// Creates a new user.
     /// </summary>
-    /// <param name="request">Dados do usuário a ser criado.</param>
-    /// <returns>O usuário criado.</returns>
+    /// <param name="newUser">Data of the user to be created.</param>
+    /// <returns>The created user.</returns>
     [HttpPost]
     [ProducesResponseType(typeof(CreateUserResult), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand request)
+    public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand newUser)
     {
         try
         {
-            var createdUser = await mediator.Send(request);
+            var createdUser = await mediator.Send(newUser);
             return Created(HttpContext.Request.GetDisplayUrl(), createdUser);
         }
         catch (Exception ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, 
-                new { Message = "Erro ao criar o usuário.", Details = ex.Message });
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                new { Message = "Error creating the user.", Details = ex.Message });
         }
     }
 
     /// <summary>
-    /// Atualiza um usuário existente.
+    /// Updates an existing user.
     /// </summary>
-    /// <param name="request">Dados do usuário a ser atualizado.</param>
-    /// <returns>O usuário atualizado.</returns>
+    /// <param name="user">Data of the user to be updated.</param>
+    /// <returns>The updated user.</returns>
     [HttpPut]
     [ProducesResponseType(typeof(CreateUserResult), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> UpdateUser([FromBody] CreateUserCommand request)
+    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand user)
     {
         try
         {
-            var updatedUser = await mediator.Send(request);
+            var updatedUser = await mediator.Send(user);
             return Ok(updatedUser);
         }
         catch (Exception ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, 
-                new { Message = "Erro ao atualizar o usuário.", Details = ex.Message });
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                new { Message = "Error updating the user.", Details = ex.Message });
         }
     }
 
     /// <summary>
-    /// Deleta um usuário pelo ID.
+    /// Deletes a user by their ID.
     /// </summary>
-    /// <param name="id">ID do usuário a ser deletado.</param>
-    /// <returns>Confirmação da exclusão.</returns>
+    /// <param name="id">The ID of the user to be deleted.</param>
+    /// <returns>Confirmation of the deletion.</returns>
     [HttpDelete("{id}")]
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> DeleteUser(string id)
+    public async Task<IActionResult> DeleteUser(DeleteUserCommand id)
     {
         try
         {
-            var result = await mediator.Send(new DeleteUserCommand(id));
-            return result ? Ok() : NotFound(new { Message = "Usuário não encontrado." });
+            var result = await mediator.Send(id);
+            return result ? Ok() : NotFound(new { Message = "User not found." });
         }
         catch (Exception ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, 
-                new { Message = "Erro ao deletar o usuário.", Details = ex.Message });
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                new { Message = "Error deleting the user.", Details = ex.Message });
         }
     }
 }

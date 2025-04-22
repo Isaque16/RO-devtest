@@ -14,106 +14,112 @@ using Application.Features.Sale.Queries.GetAllSalesByPeriodQuery;
 using Application.Features.Sale.Commands.CreateSaleCommand;
 
 [Route("api/sales")]
-[OpenApiTag("Sales", Description = "Endpoints para gerenciar vendas.")]
+[OpenApiTag("Sales", Description = "Endpoints to manage sales.")]
 [ApiController]
 public class SaleController(IMediator mediator) : ControllerBase
 {
   /// <summary>
-  /// Obtém todas as vendas com paginação.
+  /// Retrieves all sales with pagination.
   /// </summary>
-  /// <param name="pagination">Parâmetros de paginação.</param>
-  /// <returns>Lista paginada de vendas.</returns>
+  /// <param name="pagination">Pagination parameters.</param>
+  /// <returns>A paginated list of sales.</returns>
   [HttpGet]
   [ProducesResponseType(typeof(PaginatedResult<Sale>), StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public async Task<IActionResult> GetAllSales([FromQuery] PaginationQuery pagination)
+  public async Task<IActionResult> GetAllSales([FromQuery] GetAllSalesQuery pagination)
   {
     try
     {
-      var sales = await mediator.Send(new GetAllSalesQuery(pagination));
+      var sales = await mediator.Send(pagination);
       return Ok(sales);
     }
     catch (Exception ex)
     {
-      return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Erro ao buscar vendas.", Details = ex.Message });
+      return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "Error retrieving sales.", Details = ex.Message });
     }
   }
 
   /// <summary>
-  /// Obtém todas as vendas em um período específico com paginação.
+  /// Retrieves all sales within a specific period with pagination.
   /// </summary>
-  /// <param name="dateTimeRange">Intervalo de datas para filtrar as vendas.</param>
-  /// <param name="pagination">Parâmetros de paginação.</param>
-  /// <returns>Lista paginada das vendas no período especificado.</returns>
+  /// <param name="pagination">Pagination parameters.</param>
+  /// <param name="dateRange">Date range to filter sales.</param>
+  /// <returns>A paginated list of sales within the specified period.</returns>
   [HttpGet("period")]
   [ProducesResponseType(typeof(GetAllSalesByPeriodResult), StatusCodes.Status200OK)]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> GetAllSalesByPeriod(
-    [FromBody] DateTimeRange dateTimeRange, [FromQuery] PaginationQuery pagination)
+    [FromQuery] PaginationQuery pagination,
+    [FromBody] DateTimeRange dateRange)
   {
     try
     {
-      var sales = await mediator.Send(new GetAllSalesByPeriodQuery(dateTimeRange, pagination));
+      var query = new GetAllSalesByPeriodQuery
+      {
+        Pagination = pagination,
+        DateRange = dateRange
+      };
+
+      var sales = await mediator.Send(query);
       return Ok(sales);
     }
     catch (Exception ex)
     {
-      return StatusCode(StatusCodes.Status500InternalServerError, 
-        new { Message = "Erro ao buscar vendas.", Details = ex.Message });
+      return StatusCode(StatusCodes.Status500InternalServerError,
+        new { Message = "Error retrieving sales.", Details = ex.Message });
     }
   }
 
   /// <summary>
-  /// Obtém uma venda pelo ID.
+  /// Retrieves a sale by its ID.
   /// </summary>
-  /// <param name="id">ID da venda.</param>
-  /// <returns>A venda correspondente ao ID.</returns>
+  /// <param name="id">The ID of the sale.</param>
+  /// <returns>The sale corresponding to the given ID.</returns>
   [HttpGet("{id}")]
   [ProducesResponseType(typeof(Sale), StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status404NotFound)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public async Task<IActionResult> GetSaleById(string id)
+  public async Task<IActionResult> GetSaleById(GetSaleByIdQuery id)
   {
     try
     {
-      var sale = await mediator.Send(new GetSaleByIdQuery(id));
-      if (sale == null)
-        return NotFound(new { Message = "Venda não encontrada." });
+      var sale = await mediator.Send(id);
       return Ok(sale);
     }
     catch (Exception ex)
     {
-      return StatusCode(StatusCodes.Status500InternalServerError, 
-        new { Message = "Erro ao buscar a venda.", Details = ex.Message });
+      return StatusCode(StatusCodes.Status500InternalServerError,
+        new { Message = "Error retrieving the sale.", Details = ex.Message });
     }
   }
 
   /// <summary>
-  /// Cria uma nova venda.
+  /// Creates a new sale.
   /// </summary>
-  /// <param name="sale">Comando contendo os detalhes da venda a ser criada.</param>
-  /// <returns>A venda criada.</returns>
+  /// <param name="newSale">Command containing the details of the sale to be created.</param>
+  /// <returns>The created sale.</returns>
   [HttpPost]
   [ProducesResponseType(typeof(Sale), StatusCodes.Status201Created)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public async Task<IActionResult> CreateSale([FromBody] CreateSaleCommand sale)
+  public async Task<IActionResult> CreateSale([FromBody] CreateSaleCommand newSale)
   {
     try
     {
-      var createdSale = await mediator.Send(sale);
+      var createdSale = await mediator.Send(newSale);
       return Created(HttpContext.Request.GetDisplayUrl(), createdSale);
     }
     catch (Exception ex)
     {
-      return StatusCode(StatusCodes.Status500InternalServerError, 
-        new { Message = "Erro ao criar a venda.", Details = ex.Message });
+      return StatusCode(StatusCodes.Status500InternalServerError,
+        new { Message = "Error creating the sale.", Details = ex.Message });
     }
   }
 
   /// <summary>
-  /// Atualiza uma venda existente.
+  /// Updates an existing sale.
   /// </summary>
-  /// <param name="sale">Dados da venda a ser atualizada.</param>
-  /// <returns>A venda atualizada.</returns>
+  /// <param name="sale">Data of the sale to be updated.</param>
+  /// <returns>The updated sale.</returns>
   [HttpPut]
   [ProducesResponseType(typeof(Sale), StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -127,31 +133,31 @@ public class SaleController(IMediator mediator) : ControllerBase
     }
     catch (Exception ex)
     {
-      return StatusCode(StatusCodes.Status500InternalServerError, 
-        new { Message = "Erro ao atualizar a venda.", Details = ex.Message });
+      return StatusCode(StatusCodes.Status500InternalServerError,
+        new { Message = "Error updating the sale.", Details = ex.Message });
     }
   }
 
   /// <summary>
-  /// Deleta uma venda pelo ID.
+  /// Deletes a sale by its ID.
   /// </summary>
-  /// <param name="id">ID da venda a ser deletada.</param>
-  /// <returns>Confirmação da exclusão.</returns>
+  /// <param name="id">The ID of the sale to be deleted.</param>
+  /// <returns>Confirmation of the deletion.</returns>
   [HttpDelete("{id}")]
   [ProducesResponseType(typeof(bool), StatusCodes.Status204NoContent)]
   [ProducesResponseType(StatusCodes.Status404NotFound)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public async Task<IActionResult> DeleteSale(string id)
+  public async Task<IActionResult> DeleteSale(DeleteSaleCommand id)
   {
     try
     {
-      var result = await mediator.Send(new DeleteSaleCommand(id));
-      return result ? NoContent() : NotFound(new { Message = "Venda não encontrada." });
+      var result = await mediator.Send(id);
+      return result ? NoContent() : NotFound(new { Message = "Sale not found." });
     }
     catch (Exception ex)
     {
-      return StatusCode(StatusCodes.Status500InternalServerError, 
-        new { Message = "Erro ao deletar a venda.", Details = ex.Message });
+      return StatusCode(StatusCodes.Status500InternalServerError,
+        new { Message = "Error deleting the sale.", Details = ex.Message });
     }
   }
 }

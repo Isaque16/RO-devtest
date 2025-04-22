@@ -1,10 +1,10 @@
 namespace RO.DevTest.WebApi;
 
-using RO.DevTest.Application;
+using Application;
 using RO.DevTest.Application.Contracts.Infrastructure;
-using RO.DevTest.Application.Features.Auth;
-using RO.DevTest.Infrastructure.IoC;
-using RO.DevTest.Persistence.IoC;
+using Application.Features.Auth;
+using Infrastructure.IoC;
+using Persistence.IoC;
 
 public class Program 
 {
