@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
-import basketReducer from "./slices/basketSlice";
+import cartReducer from "./slices/cartSlice";
 import userReducer from "./slices/userSlice";
 import {
   FLUSH,
@@ -16,11 +16,11 @@ import persistStore from "redux-persist/es/persistStore";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["basket", "user"],
+  whitelist: ["cart", "user"],
 };
 
 const rootReducer = combineReducers({
-  basket: basketReducer,
+  cart: cartReducer,
   user: userReducer,
 });
 

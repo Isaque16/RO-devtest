@@ -51,22 +51,6 @@ export default function UserIcon() {
             <div className="card-body">
               <span className="text-lg">{userData?.userName}</span>
               <ul className="list text-base">
-                <li>
-                  <a
-                    href="/config"
-                    className="link-primary hover:cursor-pointer"
-                  >
-                    Configurações
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/historico"
-                    className="link-primary hover:cursor-pointer"
-                  >
-                    Histórico de Compras
-                  </a>
-                </li>
                 <li className="border-b-2 border-black/10 min-w-[95%] flex justify-self-center my-2"></li>
                 <li>
                   <button

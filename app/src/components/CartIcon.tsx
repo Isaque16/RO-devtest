@@ -1,8 +1,9 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store.ts";
+import { Link } from "react-router-dom";
 
 export default function CartIcon() {
-  const items = useSelector((state: RootState) => state.basket);
+  const items = useSelector((state: RootState) => state.cart);
 
   return (
     <div className="flex-none">
@@ -40,9 +41,9 @@ export default function CartIcon() {
               Subtotal: R${items.totalValue.toFixed(2)}
             </span>
             <div className="card-actions">
-              <a href={"/cesta/"} className="btn btn-primary btn-block">
+              <Link to="/cart" className="btn btn-primary btn-block">
                 View cart
-              </a>
+              </Link>
             </div>
           </div>
         </div>

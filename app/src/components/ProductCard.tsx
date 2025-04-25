@@ -12,7 +12,7 @@ export default function ProductCard({
   productPrice: string;
 }) {
   return (
-    <a href={`/catalogo/${id}`}>
+    <a href={`/catalog/product/${id}`}>
       <div className="card w-80 md:w-96 max-h-screen bg-neutral-content hover:ring-1 hover:ring-white shadow-xl p-2 cursor-pointer">
         <figure className="image-full">
           <img src={imagePath} alt="image" width={400} height={225} />

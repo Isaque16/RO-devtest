@@ -2,23 +2,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 import IProduct from "../../interfaces/IProduct.ts";
 
-type BasketDataType = {
+type CartDataType = {
   items: IProduct[];
   quantities: number[];
   totalValue: number;
 };
 
-const initialState: BasketDataType = {
+const initialState: CartDataType = {
   items: [],
   quantities: [],
   totalValue: 0,
 };
 
-const basketSlice = createSlice({
-  name: "basket",
+const cartSlice = createSlice({
+  name: "cart",
   initialState,
   reducers: {
-    addToBasket: (state, { payload }) => {
+    addToCart: (state, { payload }) => {
       const { product, quantity }: { product: IProduct; quantity: number } =
         payload;
       const existingIndex = state.items.findIndex(
@@ -48,7 +48,7 @@ const basketSlice = createSlice({
         );
       }
     },
-    removeFromBasket: (state, { payload }) => {
+    removeFromCart: (state, { payload }) => {
       const productId: string = payload;
       const index = state.items.findIndex((item) => item.id === productId);
 
@@ -59,7 +59,7 @@ const basketSlice = createSlice({
         state.quantities.splice(index, 1);
       }
     },
-    clearBasket: (state) => {
+    clearCart: (state) => {
       state.items = [];
       state.quantities = [];
       state.totalValue = 0;
@@ -67,6 +67,6 @@ const basketSlice = createSlice({
   },
 });
 
-export const { addToBasket, updateQuantity, removeFromBasket, clearBasket } =
-  basketSlice.actions;
-export default basketSlice.reducer;
+export const { addToCart, updateQuantity, removeFromCart, clearCart } =
+  cartSlice.actions;
+export default cartSlice.reducer;

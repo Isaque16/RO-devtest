@@ -5,8 +5,8 @@ import Register from "./pages/Register";
 import Catalog from "./pages/Catalog";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
-import Estoque from "./pages/Estoque";
-import Clientes from "./pages/Clientes";
+import Stock from "./pages/Stock.tsx";
+import Customers from "./pages/Customers.tsx";
 import Sales from "./pages/Sales";
 
 export default function AppRoutes() {
@@ -15,13 +15,14 @@ export default function AppRoutes() {
       <Route index element={<Home />} />
       <Route path="login" element={<Login />} />
       <Route path="singup" element={<Register />} />
-      <Route path="catalog" element={<Catalog />}>
+      <Route path="catalog">
+        <Route index element={<Catalog />} />
         <Route path="product/:id" element={<Product />} />
       </Route>
       <Route path="cart" element={<Cart />} />
       <Route path="admin">
-        <Route path="estoque" element={<Estoque />} />
-        <Route path="clientes" element={<Clientes />} />
+        <Route path="stock" element={<Stock />} />
+        <Route path="customers" element={<Customers />} />
         <Route path="sales" element={<Sales />} />
       </Route>
     </Routes>

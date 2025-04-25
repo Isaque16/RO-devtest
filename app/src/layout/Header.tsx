@@ -3,7 +3,7 @@ import UserIcon from "../components/UserIcon.tsx";
 
 export default function Header() {
   return (
-    <header className="menu menu-horizontal sticky w-full flex flex-row justify-between px-4 items-center shadow-md z-50">
+    <header className="menu menu-horizontal sticky w-full flex flex-row justify-between px-4 items-center shadow-md">
       <div className="flex flex-row md:flex-row navbar justify-between">
         <div className="flex flex-row">
           <div className="flex-1">
