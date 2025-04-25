@@ -16,7 +16,7 @@ using Application.Features.User.Queries.GetUserByIdQuery;
 /// <summary>
 /// Controller responsible for managing users.
 /// </summary>
-[Route("api/user")]
+[Route("api/users")]
 [OpenApiTag("Users", Description = "Endpoints to manage users.")]
 [ApiController]
 public class UsersController(IMediator mediator) : ControllerBase
@@ -52,11 +52,12 @@ public class UsersController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(GetUserResult), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetUserById(GetUserByIdQuery id)
+    public async Task<IActionResult> GetUserById(string id)
     {
         try
         {
-            var user = await mediator.Send(id);
+            var query = new GetUserByIdQuery(id);
+            var user = await mediator.Send(query);
             return Ok(user);
         }
         catch (Exception ex)
@@ -119,11 +120,12 @@ public class UsersController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> DeleteUser(DeleteUserCommand id)
+    public async Task<IActionResult> DeleteUser(string id)
     {
         try
         {
-            var result = await mediator.Send(id);
+            var command = new DeleteUserCommand(id);
+            var result = await mediator.Send(command);
             return result ? Ok() : NotFound(new { Message = "User not found." });
         }
         catch (Exception ex)

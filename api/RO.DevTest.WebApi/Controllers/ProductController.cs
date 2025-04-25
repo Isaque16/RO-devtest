@@ -44,15 +44,16 @@ public class ProductController(IMediator mediator) : ControllerBase
   /// </summary>
   /// <param name="id">The ID of the product.</param>
   /// <returns>The product corresponding to the given ID.</returns>
-  [HttpGet("{id}")]
+  [HttpGet("{id:guid}")]
   [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status404NotFound)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public async Task<IActionResult> GetProductById(GetProductByIdQuery id)
+  public async Task<IActionResult> GetProductById(Guid id)
   {
     try
     {
-      var product = await mediator.Send(id);
+      var query = new GetProductByIdQuery(id);
+      var product = await mediator.Send(query);
       return Ok(product);
     }
     catch (Exception ex)
@@ -111,15 +112,16 @@ public class ProductController(IMediator mediator) : ControllerBase
   /// </summary>
   /// <param name="id">The ID of the product to be deleted.</param>
   /// <returns>Confirmation of the deletion.</returns>
-  [HttpDelete("{id}")]
+  [HttpDelete("{id:guid}")]
   [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status404NotFound)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public async Task<IActionResult> DeleteProduct(DeleteProductCommand id)
+  public async Task<IActionResult> DeleteProduct(Guid id)
   {
     try
     {
-      var result = await mediator.Send(id);
+      var command = new DeleteProductCommand(id);
+      var result = await mediator.Send(command);
       return result ? Ok() : NotFound(new { Message = "Product not found." });
     }
     catch (Exception ex)

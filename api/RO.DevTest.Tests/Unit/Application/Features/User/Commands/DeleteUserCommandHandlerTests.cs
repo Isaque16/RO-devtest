@@ -22,7 +22,7 @@ public class DeleteUserCommandHandlerTests
     private static DeleteUserCommand GenerateValidCommand()
     {
         return new Faker<DeleteUserCommand>()
-            .RuleFor(u => u.Id, f => f.Random.Guid().ToString());
+            .CustomInstantiator(f => new DeleteUserCommand(f.Random.Guid().ToString()));
     }
     
     [Fact]
@@ -50,7 +50,7 @@ public class DeleteUserCommandHandlerTests
     public async Task Handle_ReturnsFalse_WhenUserIdIsEmpty()
     {
         // Arrange
-        var command = new DeleteUserCommand { Id = string.Empty };
+        var command = new DeleteUserCommand(string.Empty);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -63,7 +63,7 @@ public class DeleteUserCommandHandlerTests
     public async Task Handle_ReturnsFalse_WhenUserDoesNotExist()
     {
         // Arrange
-        var command = new DeleteUserCommand { Id = Guid.NewGuid().ToString() };
+        var command = new DeleteUserCommand(Guid.NewGuid().ToString());
 
         _userRepoMock
             .Setup(repo => repo.GetByIdAsync(command.Id, It.IsAny<CancellationToken>()))
@@ -80,7 +80,7 @@ public class DeleteUserCommandHandlerTests
     public async Task Handle_ReturnsFalse_WhenDeleteOperationFails()
     {
         // Arrange
-        var command = new DeleteUserCommand { Id = Guid.NewGuid().ToString() };
+        var command = new DeleteUserCommand(Guid.NewGuid().ToString());
         var user = new User { Id = command.Id };
 
         _userRepoMock

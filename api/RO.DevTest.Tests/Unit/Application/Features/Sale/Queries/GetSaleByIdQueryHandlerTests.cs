@@ -21,7 +21,7 @@ public class GetSaleByIdQueryHandlerTests
     private static GetSaleByIdQuery GenerateValidQuery()
     {
         return new Faker<GetSaleByIdQuery>()
-            .RuleFor(s => s.Id, f => f.Random.Guid());
+            .CustomInstantiator(f => new GetSaleByIdQuery(f.Random.Guid()));
     }
     
     [Fact]

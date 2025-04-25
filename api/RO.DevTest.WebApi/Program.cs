@@ -39,6 +39,8 @@ public class Program
 
         app.UseHttpsRedirection();
 
+        app.UseCors("AllowAll");
+
         app.UseAuthorization();
 
         app.MapControllers();

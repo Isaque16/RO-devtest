@@ -75,15 +75,16 @@ public class SaleController(IMediator mediator) : ControllerBase
   /// </summary>
   /// <param name="id">The ID of the sale.</param>
   /// <returns>The sale corresponding to the given ID.</returns>
-  [HttpGet("{id}")]
+  [HttpGet("{id:guid}")]
   [ProducesResponseType(typeof(Sale), StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status404NotFound)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public async Task<IActionResult> GetSaleById(GetSaleByIdQuery id)
+  public async Task<IActionResult> GetSaleById(Guid id)
   {
     try
     {
-      var sale = await mediator.Send(id);
+      var query = new GetSaleByIdQuery(id);
+      var sale = await mediator.Send(query);
       return Ok(sale);
     }
     catch (Exception ex)
@@ -143,15 +144,16 @@ public class SaleController(IMediator mediator) : ControllerBase
   /// </summary>
   /// <param name="id">The ID of the sale to be deleted.</param>
   /// <returns>Confirmation of the deletion.</returns>
-  [HttpDelete("{id}")]
+  [HttpDelete("{id:guid}")]
   [ProducesResponseType(typeof(bool), StatusCodes.Status204NoContent)]
   [ProducesResponseType(StatusCodes.Status404NotFound)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public async Task<IActionResult> DeleteSale(DeleteSaleCommand id)
+  public async Task<IActionResult> DeleteSale(Guid id)
   {
     try
     {
-      var result = await mediator.Send(id);
+      var command = new DeleteSaleCommand(id);
+      var result = await mediator.Send(command);
       return result ? NoContent() : NotFound(new { Message = "Sale not found." });
     }
     catch (Exception ex)

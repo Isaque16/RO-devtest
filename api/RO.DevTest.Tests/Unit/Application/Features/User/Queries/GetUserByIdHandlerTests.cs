@@ -21,7 +21,7 @@ public class GetUserByIdHandlerTests
     private static GetUserByIdQuery GenerateValidQuery()
     {
         return new Faker<GetUserByIdQuery>()
-            .RuleFor(q => q.Id, f => f.Random.Guid().ToString())
+            .CustomInstantiator(f => new GetUserByIdQuery(f.Random.String()))
             .Generate();
     }
 

@@ -1,7 +1,7 @@
 namespace RO.DevTest.Application.Features.Product.Commands.DeleteProductCommand;
 using MediatR;
 
-public class DeleteProductCommand : IRequest<bool>
+public class DeleteProductCommand(Guid id) : IRequest<bool>
 {
-  public Guid Id { get; set; } = Guid.Empty;
+  public Guid Id { get; set; } = id;
 }

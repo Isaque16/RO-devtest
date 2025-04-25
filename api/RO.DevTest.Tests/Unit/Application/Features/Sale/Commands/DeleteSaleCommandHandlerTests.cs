@@ -20,7 +20,7 @@ public class DeleteSaleCommandHandlerTests
     private static DeleteSaleCommand GenerateValidCommand()
     {
         return new Faker<DeleteSaleCommand>()
-            .RuleFor(s => s.Id, f => f.Random.Guid());
+            .CustomInstantiator(f => new DeleteSaleCommand(f.Random.Guid()));
     }
     
     [Fact]

@@ -1,6 +1,4 @@
-﻿namespace RO.DevTest.Infrastructure.IoC;
-
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using RO.DevTest.Application.Contracts.Infrastructure;
 using RO.DevTest.Application.Contracts.Persistance.Repositories;
@@ -8,6 +6,8 @@ using RO.DevTest.Domain.Entities;
 using RO.DevTest.Infrastructure.Abstractions;
 using RO.DevTest.Persistence;
 using RO.DevTest.Persistence.Repositories;
+
+namespace RO.DevTest.Infrastructure.IoC;
 
 /// <summary>
 /// Provides methods to configure and inject the dependencies required
@@ -19,14 +19,12 @@ public static class InfrastructureDependencyInjector {
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to which the dependencies will be added.</param>
     /// <returns>The modified <see cref="IServiceCollection"/> instance with the Infrastructure dependencies injected.</returns>
-    public static IServiceCollection InjectInfrastructureDependencies(
+    public static void InjectInfrastructureDependencies(
         this IServiceCollection services)
     {
         services.AddDefaultIdentity();
         services.RepositoryConfig();
         services.CorsConfig();
-    
-        return services;
     }
 
     /// <summary>
@@ -34,8 +32,7 @@ public static class InfrastructureDependencyInjector {
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to which the CORS settings will be added.</param>
     /// <returns>The modified <see cref="IServiceCollection"/> instance with CORS configured.</returns>
-    private static IServiceCollection CorsConfig(
-        this IServiceCollection services)
+    private static void CorsConfig(this IServiceCollection services)
     {
         services.AddCors(options =>
         {
@@ -47,8 +44,6 @@ public static class InfrastructureDependencyInjector {
                            .AllowAnyHeader();
                 });
         });
-        
-        return services;
     }
 
     /// <summary>
@@ -56,15 +51,12 @@ public static class InfrastructureDependencyInjector {
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> instance to which the repository dependencies will be added.</param>
     /// <returns>The modified <see cref="IServiceCollection"/> instance with the repository dependencies injected.</returns>
-    private static IServiceCollection RepositoryConfig(
-        this IServiceCollection services)
+    private static void RepositoryConfig(this IServiceCollection services)
     {
         services.AddScoped<IIdentityAbstractor, IdentityAbstractor>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ISaleRepository, SaleRepository>();
-        
-        return services;
     }
 
     /// <summary>
@@ -74,14 +66,11 @@ public static class InfrastructureDependencyInjector {
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> instance to which the default identity configuration will be added.</param>
     /// <returns>The modified <see cref="IServiceCollection"/> instance with the default identity configuration added.</returns>
-    private static IServiceCollection AddDefaultIdentity(
-        this IServiceCollection services)
+    private static void AddDefaultIdentity(this IServiceCollection services)
     {
         services.AddDefaultIdentity<User>()
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<DefaultContext>()
             .AddDefaultTokenProviders();
-        
-        return services;
     }
 }

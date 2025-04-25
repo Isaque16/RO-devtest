@@ -22,7 +22,7 @@ public class GetProductByIdQueryHandlerTests
     private static GetProductByIdQuery GenerateValidQuery()
     {
         return new Faker<GetProductByIdQuery>()
-            .RuleFor(p => p.Id, f => f.Random.Guid());
+            .CustomInstantiator(f => new GetProductByIdQuery(f.Random.Guid()));
     }
 
     [Fact]

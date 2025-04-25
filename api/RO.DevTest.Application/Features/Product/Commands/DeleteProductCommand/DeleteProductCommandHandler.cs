@@ -11,10 +11,7 @@ public class DeleteProductCommandHandler(IProductRepository productRepository)
   {
     if (request.Id == Guid.Empty) return false;
     
-    var product = await productRepository.GetByIdAsync(request.Id, cancellationToken);
-    if (product == null) 
-      throw new KeyNotFoundException($"Product with ID {request.Id} not found.");
-
+    var product = await productRepository.GetByIdAsync(request.Id, cancellationToken) ?? throw new KeyNotFoundException($"Product with ID {request.Id} not found.");
     return await productRepository.DeleteAsync(product);
   }
 }
