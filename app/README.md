@@ -1,54 +1,46 @@
-# React + TypeScript + Vite
+# Rota das Oficinas - Documentação Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Visão Geral
 
-Currently, two official plugins are available:
+Este projeto é uma aplicação frontend desenvolvida com tecnologias modernas, construída utilizando React com TypeScript e Vite como bundler.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tecnologias Principais
 
-## Expanding the ESLint configuration
+- **React 19**: Framework JavaScript para construção de interfaces
+- **TypeScript**: Superset tipado de JavaScript
+- **Vite**: Ferramenta de build rápida e moderna
+- **TailwindCSS 4**: Framework CSS utilitário
+- **DaisyUI**: Biblioteca de componentes para Tailwind
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Bibliotecas de Suporte
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.pages.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- **React Router DOM 7**: Navegação entre páginas
+- **Redux Toolkit + React Redux**: Gerenciamento de estado global
+- **Redux Persist**: Persistência de estado
+- **TanStack Query**: Gerenciamento de dados do servidor
+- **React Hook Form**: Manipulação de formulários
+- **Zod**: Validação de esquemas
+- **Axios**: Cliente HTTP para requisições à API
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Estrutura do Projeto
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+O projeto segue a estrutura padrão de uma aplicação Vite com React e TypeScript.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+## Comandos Disponíveis
+
+```bash
+# Instalar dependências
+npm install
+
+# Iniciar servidor de desenvolvimento
+npm run dev
+
+# Compilar para produção
+npm run build
+
+# Verificar o código com ESLint
+npm run lint
+
+# Pré-visualização do build
+npm run preview
 ```
