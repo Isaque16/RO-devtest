@@ -1,0 +1,40 @@
+version: "3.8"
+
+name: Ro.DevTest
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:80"
+      - "5001:443"
+    depends_on:
+      - postgres
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=devtest;Username=postgres;Password=root
+    networks:
+      - devtest-network
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=devtest
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - devtest-network
+
+networks:
+  devtest-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
