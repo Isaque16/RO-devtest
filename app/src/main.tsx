@@ -7,6 +7,7 @@ import Header from "./layout/Header.tsx";
 import Footer from "./layout/Footer.tsx";
 import StoreProvider from "./store/StoreProvider.tsx";
 import AppRoutes from "./AppRoutes.tsx";
+import { ToastProvider } from "./components/Toast.tsx";
 
 const queryClient = new QueryClient();
 
@@ -15,9 +16,11 @@ createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <StoreProvider>
         <BrowserRouter>
-          <Header />
-          <AppRoutes />
-          <Footer />
+          <ToastProvider>
+            <Header />
+            <AppRoutes />
+            <Footer />
+          </ToastProvider>
         </BrowserRouter>
       </StoreProvider>
     </QueryClientProvider>

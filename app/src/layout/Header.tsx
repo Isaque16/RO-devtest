@@ -1,5 +1,6 @@
 import CartIcon from "../components/CartIcon.tsx";
 import UserIcon from "../components/UserIcon.tsx";
+import { NavLink } from "react-router-dom";
 
 export default function Header() {
   return (
@@ -16,21 +17,17 @@ export default function Header() {
             </a>
           </div>
         </div>
-        <ul
+        <nav
           tabIndex={0}
           className="hidden md:flex menu menu-vertical md:menu-horizontal rounded-box gap-2 text-xl"
         >
-          <li>
-            <a className="btn btn-ghost text-2xl" href="/">
-              Sobre nós
-            </a>
-          </li>
-          <li>
-            <a className="btn btn-ghost text-2xl" href="/catalog">
-              Produtos
-            </a>
-          </li>
-        </ul>
+          <NavLink className="btn btn-ghost text-2xl" to="/">
+            Sobre nós
+          </NavLink>
+          <NavLink className="btn btn-ghost text-2xl" to="/catalog">
+            Produtos
+          </NavLink>
+        </nav>
         <div className="hidden md:flex flex-row justify-center items-center gap-5">
           <CartIcon />
           <UserIcon />

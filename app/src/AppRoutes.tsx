@@ -6,7 +6,6 @@ import Catalog from "./pages/Catalog";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
 import Stock from "./pages/Stock.tsx";
-import Customers from "./pages/Customers.tsx";
 import Sales from "./pages/Sales";
 
 export default function AppRoutes() {
@@ -22,7 +21,6 @@ export default function AppRoutes() {
       <Route path="cart" element={<Cart />} />
       <Route path="admin">
         <Route path="stock" element={<Stock />} />
-        <Route path="customers" element={<Customers />} />
         <Route path="sales" element={<Sales />} />
       </Route>
     </Routes>

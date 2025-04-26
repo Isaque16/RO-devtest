@@ -49,8 +49,7 @@ public class SaleController(IMediator mediator) : ControllerBase
   [ProducesResponseType(typeof(GetAllSalesByPeriodResult), StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> GetAllSalesByPeriod(
-    [FromQuery] PaginationQuery pagination,
-    [FromBody] DateTimeRange dateRange)
+    [FromQuery] DateTimeRange dateRange, [FromQuery] PaginationQuery pagination)
   {
     try
     {

@@ -13,17 +13,25 @@ namespace RO.DevTest.Application.Features.Auth;
 /// </summary>
 public class TokenService(IConfiguration configuration) : ITokenService
 {
-    public string GenerateAccessToken(Domain.Entities.User user, IList<string> roles)
+    /// <summary>
+    /// Generates a JSON Web Token (JWT) for a given user with specified roles.
+    /// </summary>
+    /// <param name="user">The user for whom the access token is generated.</param>
+    /// <param name="roles">A list of roles associated with the user.</param>
+    /// <returns>A string representing the generated JWT access token.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if the JWT key is not found in the configuration.</exception
+    public string GenerateAccessToken(Domain.Entities.User user,
+        IList<string> roles)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not found in configuration")));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+            configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not found in configuration")));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Sub, user.Id),
-            new(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
+            new(ClaimTypes.Name, user.Name),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new(ClaimTypes.Name, user.Name)
         };
 
         // Add roles as claims
@@ -40,8 +48,20 @@ public class TokenService(IConfiguration configuration) : ITokenService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
+    /// <summary>
+    /// Generates a secure, base64-encoded refresh token that is URL-safe.
+    /// </summary>
+    /// <returns>A URL-safe, base64-encoded string representing the refresh token.</returns>
     public string GenerateRefreshToken()
     {
-        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+        var randomNumber = new byte[32];
+
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        
+        return Convert.ToBase64String(randomNumber)
+            .Replace("+", "-")
+            .Replace("/", "_")
+            .TrimEnd('=');
     }
 }

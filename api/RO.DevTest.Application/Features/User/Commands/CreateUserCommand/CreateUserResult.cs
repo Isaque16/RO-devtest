@@ -8,8 +8,7 @@ public record CreateUserResult(
     string UserName,
     string Email,
     string PhoneNumber,
-    UserRoles Role
-)
+    UserRoles Role)
 {
     public CreateUserResult(Domain.Entities.User user) 
         : this(

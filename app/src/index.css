@@ -1,2 +1,8 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+@utility link-hover {
+  &:hover {
+    @apply hover:text-yellow-400;
+  }
+}
