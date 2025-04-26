@@ -4,9 +4,9 @@ import IProduct from "../interfaces/IProduct.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import ProductCard from "../components/ProductCard.tsx";
 import IPagedResult from "../interfaces/IPagedResult.ts";
+import { useToast } from "../components/Toast.tsx";
 
 const formSchema = z.object({
   id: z.string().optional().readonly(),
@@ -42,6 +42,8 @@ async function fetchDeleteProduct(id: string): Promise<boolean> {
 }
 
 export default function Stock() {
+  const { showToast } = useToast();
+
   const {
     register,
     handleSubmit,
@@ -58,27 +60,23 @@ export default function Stock() {
     queryFn: fetchProducts,
   });
 
-  const [toastResponseMessage, setToastResponseMessage] = useState("");
-  const showToastMessage = (message: string) => {
-    setToastResponseMessage(message);
-    setTimeout(() => setToastResponseMessage(""), 5000);
-  };
-
   const { mutateAsync: saveProduct } = useMutation({
     mutationFn: fetchSaveProduct,
     onSuccess() {
       reset();
       refetch();
-      showToastMessage("Estoque atualizado com sucesso!");
+      showToast("Estoque atualizado com sucesso!", "success");
     },
+    onError: () => showToast("Erro ao atualizar estoque", "error"),
   });
 
   const { mutateAsync: deleteProduct } = useMutation({
     mutationFn: fetchDeleteProduct,
     onSuccess() {
       refetch();
-      showToastMessage("Produto removido com sucesso!");
+      showToast("Produto removido com sucesso!", "success");
     },
+    onError: () => showToast("Erro ao remover produto", "error"),
   });
 
   const editProduct = (id: string) => {
@@ -137,15 +135,6 @@ export default function Stock() {
             >
               Registrar
             </button>
-            {toastResponseMessage && (
-              <div className="toast toast-top toast-end">
-                <div className="alert alert-info">
-                  <span className="text-white font-bold">
-                    {toastResponseMessage}
-                  </span>
-                </div>
-              </div>
-            )}
           </div>
         </form>
 

@@ -4,11 +4,14 @@ import { Link } from "react-router-dom";
 import CartItem from "../components/CartItem.tsx";
 import { clearCart } from "../store/slices/cartSlice.ts";
 import axios from "axios";
-import ISale from "../interfaces/ISale.ts";
 import { useMutation } from "@tanstack/react-query";
-import IUser from "../interfaces/IUser.ts";
+import IProduct from "../interfaces/IProduct.ts";
+import { useToast } from "../components/Toast.tsx";
 
-async function fetchCreateSale(sale: Omit<ISale, "id">) {
+async function fetchCreateSale(sale: {
+  products: IProduct[];
+  customerId: string;
+}) {
   const response = await axios.post("http://localhost:5087/api/sales", {
     sale,
   });
@@ -16,33 +19,25 @@ async function fetchCreateSale(sale: Omit<ISale, "id">) {
 }
 
 export default function Cart() {
+  const { showToast } = useToast();
   const dispatch = useDispatch();
   const cart = useSelector((state: RootState) => state.cart);
 
   const { mutateAsync: buyProducts } = useMutation({
     mutationFn: fetchCreateSale,
-    onSuccess: (data) => {
-      console.log("Compra realizada com sucesso!", data);
+    onSuccess: () => {
+      showToast("Compra realizada com sucesso", "success");
       dispatch(clearCart());
     },
-    onError: (error) => {
-      console.error("Erro ao realizar a compra:", error);
-    },
+    onError: () => showToast("Erro ao realizar compra", "error"),
   });
 
   async function onBuyProducts() {
     const customerId = localStorage.getItem("id");
-    const response = await axios.get(
-      "http://localhost:5087/api/users/" + customerId,
-    );
-    const customer = response.data as IUser;
 
     const sale = {
       products: cart.items,
-      quantity: cart.quantities,
-      totalPrice: cart.totalValue,
       customerId: customerId!,
-      customer,
     };
 
     await buyProducts(sale);

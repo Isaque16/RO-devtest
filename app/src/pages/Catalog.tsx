@@ -6,7 +6,6 @@ import IPagedResult from "../interfaces/IPagedResult.ts";
 
 async function fetchAllProducts(): Promise<IPagedResult<IProduct>> {
   const response = await axios.get("http://localhost:5087/api/products");
-  console.log(response.data);
   return response.data as IPagedResult<IProduct>;
 }
 

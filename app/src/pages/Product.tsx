@@ -2,10 +2,10 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
-import { addToCart } from "../store/slices/cartSlice.ts";
+import { addToCart } from "../store/slices/cartSlice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import IProduct from "../interfaces/IProduct.ts";
+import IProduct from "../interfaces/IProduct";
 
 async function fetchProductById(id: string) {
   const response = await axios.get(`http://localhost:5087/api/products/${id}`);
